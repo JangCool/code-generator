@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	* : 요소가 가지고 있지 않거나 1개 이상 가질 수 있음.
+	+ : 자식요소가 최소 하나 이상 가질 수 있음
+	? : 단 하나의 요소만 가질 수 있음.
+	
+	#REQUIRED : 필수속성(생량X) 절대 생략 되지 않는다.
+    #IMPLIED : 선택속성(생략O) 써도인정 안써도 인정
+    #FIXED "값" : 속성 고정값 #FIXED "축구부" : 반드시 축구부만 사용할수 있다.
+	"값" : 속성 기본값 gen CDATA "m" : FIXED 와 비슷하게 사용 가능하다.
+-->
+
+<!-- configuration(root) 엘리먼트 정의-->		
+<!ELEMENT configuration (properties?,jdbc?,global?,controllers*,services*,views*,javascripts*,tables*) >
+
+<!-- properties 엘리먼트 정의-->		
+<!ELEMENT properties (property*)>
+	<!ELEMENT property EMPTY>
+		<!ATTLIST property
+			key CDATA #REQUIRED
+			value CDATA #REQUIRED
+		>
+
+<!-- jdbc 엘리먼트 정의-->		
+<!ELEMENT jdbc EMPTY>
+	<!ATTLIST jdbc
+		url CDATA #REQUIRED
+		driverClass CDATA #REQUIRED
+		username CDATA #REQUIRED
+		password CDATA #REQUIRED
+	>
+	
+
+<!-- global 엘리먼트 정의-->		
+<!ELEMENT global (sqlsession?,controllerpkg?,servicepkg?,daopkg?,path?,default-date?)>
+	<!ELEMENT sqlsession EMPTY>
+		<!ATTLIST sqlsession
+			name CDATA #REQUIRED
+			use ( Y | N ) #IMPLIED
+		>
+	<!ELEMENT controllerpkg EMPTY>
+		<!ATTLIST controllerpkg
+			target CDATA #REQUIRED
+		>
+	<!ELEMENT servicepkg EMPTY>
+		<!ATTLIST servicepkg
+			target CDATA #REQUIRED
+		>				
+	<!ELEMENT daopkg EMPTY>
+		<!ATTLIST daopkg
+			target CDATA #REQUIRED
+		>
+	<!ELEMENT path (template?,source?,mapper?)>
+		<!ELEMENT template EMPTY>
+		<!ATTLIST template
+			target CDATA #REQUIRED
+		>
+		<!ELEMENT source EMPTY>
+		<!ATTLIST source
+			target CDATA #REQUIRED
+		>
+		<!ELEMENT mapper EMPTY>
+		<!ATTLIST mapper
+			target CDATA #REQUIRED
+		>		
+		<!ELEMENT view EMPTY>
+		<!ATTLIST view
+			target CDATA #REQUIRED
+		>	
+		<!ELEMENT javascript EMPTY>
+		<!ATTLIST javascript
+			target CDATA #REQUIRED
+		>	
+	<!ELEMENT exclude-column (insert?,update?)>
+		<!ELEMENT insert EMPTY>
+		<!ATTLIST template
+			exclude CDATA #IMPLIED
+		>
+		<!ELEMENT update EMPTY>
+		<!ATTLIST template
+			exclude CDATA #IMPLIED
+		>
+	<!ELEMENT default-date EMPTY>
+		<!ATTLIST default-date
+			reg-date-column CDATA #IMPLIED
+			mod-date-column CDATA #IMPLIED
+		>		
+<!-- controllers 엘리먼트 정의-->		
+<!ELEMENT controllers (controller*)>
+	<!ATTLIST controllers
+		business CDATA #IMPLIED
+		package CDATA #IMPLIED
+		suffix-package CDATA #IMPLIED
+		type (rest | normal) #IMPLIED
+	>
+	<!ELEMENT controller EMPTY>
+	<!ATTLIST controller
+		name CDATA #REQUIRED
+		request-mapping CDATA #IMPLIED
+		type (rest | normal) #IMPLIED
+		all-in-one (false | true) #IMPLIED
+		
+	>
+	
+<!-- services 엘리먼트 정의-->		
+<!ELEMENT services (service*)>
+	<!ATTLIST services
+		business CDATA #IMPLIED
+		package CDATA #IMPLIED
+		suffix-package CDATA #IMPLIED
+		proxy-target-class (false | true) #IMPLIED
+	>
+	<!ELEMENT service EMPTY>
+	<!ATTLIST service
+		name CDATA #REQUIRED
+	>
+	
+<!-- jsp 엘리먼트 정의-->		
+<!ELEMENT views (jsp*)>
+	<!ATTLIST views
+		business CDATA #IMPLIED
+		target CDATA #IMPLIED
+		suffix-target CDATA #IMPLIED
+	>
+	<!ELEMENT jsp EMPTY>
+	<!ATTLIST jsp
+		name CDATA #REQUIRED
+	>
+	
+<!-- js 엘리먼트 정의-->		
+<!ELEMENT javascripts (js*)>
+	<!ATTLIST javascripts
+		business CDATA #IMPLIED
+		target CDATA #IMPLIED
+		suffix-target CDATA #IMPLIED
+	>
+	<!ELEMENT javascript EMPTY>
+	<!ATTLIST javascript
+		name CDATA #REQUIRED
+	>
+	
+<!-- table 엘리먼트 정의-->		
+<!ELEMENT tables (table*)>
+	<!ATTLIST tables
+		business CDATA #IMPLIED
+		package CDATA #IMPLIED
+		suffix-package CDATA #IMPLIED
+		sqlsession CDATA #IMPLIED
+		base-dao (true | false) #IMPLIED
+		base-dto (true | false) #IMPLIED
+		base-mapper (true | false) #IMPLIED
+		only (model | repository | mapper) #IMPLIED
+	>
+	<!ELEMENT table (column*)>
+	<!ATTLIST table
+		name CDATA #REQUIRED
+		sqlsession CDATA #IMPLIED
+		rename CDATA #IMPLIED
+		desc CDATA #IMPLIED
+		alias CDATA #IMPLIED
+		suffix CDATA #IMPLIED
+		prefix CDATA #IMPLIED
+		lock (select) #IMPLIED
+	>
+	<!ELEMENT column EMPTY>
+	<!ATTLIST column
+		name CDATA #REQUIRED
+		alias CDATA #IMPLIED
+		jdbcType CDATA #IMPLIED
+		typeHandler CDATA #IMPLIED
+		type (auto | date) #IMPLIED
+		type-value CDATA #IMPLIED
+		
+	>

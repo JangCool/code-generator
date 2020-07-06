@@ -1,0 +1,43 @@
+/*-----------------------------------------------------------------------------------------------------------
+                                                                        
+	프로젝트	명	: code-generator                                             
+	설정 파일	명	: dependency.gradle                                          
+	설		명	: 프로젝트에 필요한 라이브러리를 관리한다.                                   
+                                                                        
+ -----------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------
+	저장소 정의		: 필요한 라이브러리를 다운로드 할 저장소를 설정 한다.
+ -----------------------------------------------------------------------------------------------------------*/
+repositories {
+	mavenCentral()
+	maven { 
+		url 'https://repo.spring.io/milestone' 
+	}	
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+	의존성 정의		: 프로그램 구동에 필요한 라이브러리를 지정 한다.
+ -----------------------------------------------------------------------------------------------------------*/
+dependencies {
+
+	implementation 'org.freemarker:freemarker:2.3.30'
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+	implementation 'com.sun.xml.bind:jaxb-impl:2.3.1'
+	implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
+	compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+	
+
+}
+
+test {
+	useJUnitPlatform()
+}
