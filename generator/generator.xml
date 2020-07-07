@@ -15,9 +15,11 @@
 	/>
 
 	<global>
-		<controllerpkg target="${package.base}" />
-		<servicepkg target="${package.base}" />
-		<daopkg target="${package.base}" />
+		<base-package 
+			controller = "${package.base}"
+			service = "${package.base}"
+			target = "${package.base}"
+		/>
 	</global>
 
 	<!-- start member -->

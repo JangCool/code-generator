@@ -54,13 +54,7 @@ public class CodeGenerator {
 		}
 		 
 		
-		XmlParser xp = new XmlParser(xmlPath);
-			
-		
-		Config.loadConfiguration(xp);
-		Global.init(xp);
-		
-		return xp;
+		return null;
 	}
 
 	public static void main(String[] args) {

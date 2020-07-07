@@ -30,13 +30,13 @@ public class TablesElement {
     @XmlAttribute
     private String sqlsession;
     
-    @XmlAttribute(name = "base-dao")
-    private String baseDao;
+    @XmlAttribute(name = "base-repository")
+    private String baseRepository;
 
-    @XmlAttribute(name = "base-dto")
-    private String baseDto;
+    @XmlAttribute(name = "base-model")
+    private String baseModel;
 
-    @XmlAttribute(name = "base-mapper")
+    @XmlAttribute(name = "base-mappers")
     private String baseMapper;
     
     @XmlAttribute

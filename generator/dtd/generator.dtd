@@ -33,59 +33,33 @@
 	
 
 <!-- global 엘리먼트 정의-->		
-<!ELEMENT global (sqlsession?,controllerpkg?,servicepkg?,daopkg?,path?,default-date?)>
-	<!ELEMENT sqlsession EMPTY>
-		<!ATTLIST sqlsession
+<!ELEMENT global (sql-session?,controllerpkg?,servicepkg?,daopkg?,path?,default-date?)>
+	<!ELEMENT sql-session EMPTY>
+		<!ATTLIST sql-session
 			name CDATA #REQUIRED
 			use ( Y | N ) #IMPLIED
 		>
-	<!ELEMENT controllerpkg EMPTY>
-		<!ATTLIST controllerpkg
-			target CDATA #REQUIRED
+	<!ELEMENT base-backage EMPTY>
+		<!ATTLIST base-backage
+			controller CDATA #REQUIRED
+			service CDATA #REQUIRED
+			repository CDATA #REQUIRED
 		>
-	<!ELEMENT servicepkg EMPTY>
-		<!ATTLIST servicepkg
-			target CDATA #REQUIRED
-		>				
-	<!ELEMENT daopkg EMPTY>
-		<!ATTLIST daopkg
-			target CDATA #REQUIRED
-		>
-	<!ELEMENT path (template?,source?,mapper?)>
-		<!ELEMENT template EMPTY>
-		<!ATTLIST template
-			target CDATA #REQUIRED
-		>
-		<!ELEMENT source EMPTY>
-		<!ATTLIST source
-			target CDATA #REQUIRED
-		>
-		<!ELEMENT mapper EMPTY>
-		<!ATTLIST mapper
-			target CDATA #REQUIRED
-		>		
-		<!ELEMENT view EMPTY>
-		<!ATTLIST view
-			target CDATA #REQUIRED
-		>	
-		<!ELEMENT javascript EMPTY>
-		<!ATTLIST javascript
-			target CDATA #REQUIRED
-		>	
-	<!ELEMENT exclude-column (insert?,update?)>
-		<!ELEMENT insert EMPTY>
-		<!ATTLIST template
-			exclude CDATA #IMPLIED
-		>
-		<!ELEMENT update EMPTY>
-		<!ATTLIST template
-			exclude CDATA #IMPLIED
-		>
-	<!ELEMENT default-date EMPTY>
-		<!ATTLIST default-date
-			reg-date-column CDATA #IMPLIED
-			mod-date-column CDATA #IMPLIED
-		>		
+	<!ELEMENT base-path EMPTY>
+		<!ATTLIST base-path
+			template CDATA #REQUIRED
+			source CDATA #REQUIRED
+			mappers CDATA #REQUIRED
+			views CDATA #REQUIRED
+			javascripts CDATA #REQUIRED
+	<!ELEMENT exclude-column EMPTY>
+		<!ATTLIST path
+			insert CDATA #REQUIRED
+			update CDATA #REQUIRED
+			mappers CDATA #REQUIRED
+			views CDATA #REQUIRED
+			javascripts CDATA #REQUIRED
+
 <!-- controllers 엘리먼트 정의-->		
 <!ELEMENT controllers (controller*)>
 	<!ATTLIST controllers
@@ -147,9 +121,9 @@
 		package CDATA #IMPLIED
 		suffix-package CDATA #IMPLIED
 		sqlsession CDATA #IMPLIED
-		base-dao (true | false) #IMPLIED
-		base-dto (true | false) #IMPLIED
-		base-mapper (true | false) #IMPLIED
+		base-repository (true | false) #IMPLIED
+		base-model (true | false) #IMPLIED
+		base-mappers (true | false) #IMPLIED
 		only (model | repository | mapper) #IMPLIED
 	>
 	<!ELEMENT table (column*)>

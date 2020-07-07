@@ -15,6 +15,7 @@ import code.generator.elements.children.PropertyElement;
 import code.generator.elements.children.ServicesElement;
 import code.generator.elements.children.TablesElement;
 import code.generator.elements.children.ViewsElement;
+import code.generator.elements.children.global.GlobalElement;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -27,6 +28,9 @@ public class ConfigurationElement {
 	@XmlElementWrapper(name = "properties")
     @XmlElement(name = "property")
     private List<PropertyElement> property = null;
+	
+    @XmlElement(name = "global")
+    private GlobalElement global = null;
     
     @XmlElement(name = "jdbc")
     private JdbcElement jdbc = null;
