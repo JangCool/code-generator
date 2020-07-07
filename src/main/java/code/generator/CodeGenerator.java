@@ -10,12 +10,10 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 
-import code.generator.common.Config;
-import code.generator.common.Global;
-import code.generator.common.Log;
 import code.generator.elements.ConfigurationElement;
-import code.generator.elements.children.ControllersElement;
-import code.generator.parser.XmlParser;
+import code.generator.jdbc.ColumnsResultSet;
+import code.generator.jdbc.DBConnection;
+import code.generator.jdbc.DBInfo;
 
 public class CodeGenerator {
 	
@@ -52,10 +50,6 @@ public class CodeGenerator {
 	public static void main(String[] args) {
 		try {
 			ConfigurationElement configurationElement = initParser();
-//			DBInfo dbInfo = new DBInfo(xmlParser);
-//			 
-//			DBConnection dbConn = new DBConnection(dbInfo);
-//			ColumnsResultSet processSql = new ColumnsResultSet(dbConn);
 //			  
 //			
 //			BaseMake processController = new MakeController(xmlParser);
@@ -76,7 +70,12 @@ public class CodeGenerator {
 //			BaseMake processJavascript = new MakeJavascript(xmlParser);
 //			processJavascript.generator();
 //
-//			dbConn.close();
+
+			DBInfo dbInfo = new DBInfo(configurationElement.getJdbc());
+			 
+			DBConnection dbConn = new DBConnection(dbInfo);
+			ColumnsResultSet processSql = new ColumnsResultSet(dbConn);
+			dbConn.close();
 
 		    
 		} catch (Exception e) {

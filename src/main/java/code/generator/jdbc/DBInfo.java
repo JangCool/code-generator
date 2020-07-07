@@ -1,9 +1,7 @@
 package code.generator.jdbc;
 
-import org.w3c.dom.Element;
-
+import code.generator.elements.children.JdbcElement;
 import code.generator.exception.JDBCException;
-import code.generator.parser.XmlParser;
 
 public class DBInfo {
 
@@ -19,14 +17,12 @@ public class DBInfo {
 	private String password;
 	
 	
-	public DBInfo(XmlParser xp) throws Exception {
+	public DBInfo(JdbcElement jdbcElement) throws Exception {
 		
-		Element jdbcElement = (Element) xp.getDoc().getElementsByTagName("jdbc").item(0);
-		
-		this.url = jdbcElement.getAttribute("url");
-		this.driver = jdbcElement.getAttribute("driverClass");
-		this.username = jdbcElement.getAttribute("username");
-		this.password = jdbcElement.getAttribute("password");
+		this.url = jdbcElement.getUrl();
+		this.driver = jdbcElement.getDriverClass();
+		this.username = jdbcElement.getUsername();
+		this.password = jdbcElement.getPassword();
 		
 		validate();
 	}
