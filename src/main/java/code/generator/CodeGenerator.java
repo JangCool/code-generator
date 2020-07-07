@@ -19,7 +19,7 @@ import code.generator.parser.XmlParser;
 
 public class CodeGenerator {
 	
-	public static XmlParser initParser() throws XMLStreamException {
+	public static ConfigurationElement initParser() throws XMLStreamException {
 
 		String xmlPath = System.getProperty("generator.path");
 		
@@ -27,10 +27,8 @@ public class CodeGenerator {
 			xmlPath = "generator".concat(File.separator).concat("generator.xml");
 		}
 		
-		
-		File xmlFile = new File(xmlPath);
-		 
 		JAXBContext jaxbContext = null;
+		ConfigurationElement elements = null;
 
 		try {
 		    jaxbContext = JAXBContext.newInstance(ConfigurationElement.class);              
@@ -41,25 +39,19 @@ public class CodeGenerator {
 
 		    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-		    ConfigurationElement elements = (ConfigurationElement) jaxbUnmarshaller.unmarshal(xsr);
-		    System.out.println(elements);
-		    
-//		    for (ControllersElement element : elements.getControllers()) {
-//			    Log.debug(element.toString());
-//				
-//			}
+		    elements = (ConfigurationElement) jaxbUnmarshaller.unmarshal(xsr);
 		    
 		} catch (JAXBException e) {
 		    e.printStackTrace();
 		}
 		 
 		
-		return null;
+		return elements;
 	}
 
 	public static void main(String[] args) {
 		try {
-			XmlParser xmlParser = initParser();
+			ConfigurationElement configurationElement = initParser();
 //			DBInfo dbInfo = new DBInfo(xmlParser);
 //			 
 //			DBConnection dbConn = new DBConnection(dbInfo);
