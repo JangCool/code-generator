@@ -9,7 +9,7 @@
 	<!-- db 접속 정보 설정 -->
 	<jdbc
 		url="jdbc:mysql://db.zen9.com:53306/missha?characterEncoding=utf8&amp;serverTimezone=Asia/Seoul"
-		driverClass="com.mysql.jdbc.Driver"
+		driver-class="com.mysql.jdbc.Driver"
 		username="missha"
 		password="missha2019!@"
 	/>
@@ -30,9 +30,9 @@
    </controllers>
    
 
-<!--    <services business="order" suffix-package="service" proxy-target-class="true">    -->
-<!--       <service name="BaseOrder"></service> -->
-<!--    </services> -->
+   <services business="order" suffix-package="service" proxy-target-class="true">   
+      <service name="BaseOrder"></service>
+   </services>
 
 <!--     <tables business="common" suffix-package="repository"> -->
 <!--        <table name="CM_SITE" desc="사이트 관리" /> -->

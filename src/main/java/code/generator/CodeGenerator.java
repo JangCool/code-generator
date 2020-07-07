@@ -13,8 +13,8 @@ import javax.xml.transform.stream.StreamSource;
 import code.generator.common.Config;
 import code.generator.common.Global;
 import code.generator.common.Log;
-import code.generator.elements.ControllersElements;
-import code.generator.elements.GeneratorElements;
+import code.generator.elements.ConfigurationElement;
+import code.generator.elements.children.ControllersElement;
 import code.generator.parser.XmlParser;
 
 public class CodeGenerator {
@@ -33,7 +33,7 @@ public class CodeGenerator {
 		JAXBContext jaxbContext = null;
 
 		try {
-		    jaxbContext = JAXBContext.newInstance(GeneratorElements.class);              
+		    jaxbContext = JAXBContext.newInstance(ConfigurationElement.class);              
 
 			XMLInputFactory xif = XMLInputFactory.newFactory();
 			xif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
@@ -41,13 +41,13 @@ public class CodeGenerator {
 
 		    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-		    GeneratorElements elements = (GeneratorElements) jaxbUnmarshaller.unmarshal(xsr);
-//		    log.debug("sdf {}",elements);
+		    ConfigurationElement elements = (ConfigurationElement) jaxbUnmarshaller.unmarshal(xsr);
+		    System.out.println(elements);
 		    
-		    for (ControllersElements element : elements.getControllers()) {
-			    Log.debug(element.toString());
-				
-			}
+//		    for (ControllersElement element : elements.getControllers()) {
+//			    Log.debug(element.toString());
+//				
+//			}
 		    
 		} catch (JAXBException e) {
 		    e.printStackTrace();

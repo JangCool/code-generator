@@ -1,4 +1,4 @@
-package code.generator.elements;
+package code.generator.elements.children;
 
 import java.util.List;
 
@@ -16,21 +16,33 @@ import lombok.ToString;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Getter
 @ToString
-public class ControllersElements {
+public class TablesElement {
 	
     @XmlAttribute
     private String business;
     
     @XmlAttribute(name = "package")
-    private String pkg;
+    private String defaultPackage;
     
     @XmlAttribute(name = "suffix-package")
-    private String suffixPkg;
+    private String suffixPackage;
     
     @XmlAttribute
-    private String type;
+    private String sqlsession;
+    
+    @XmlAttribute(name = "base-dao")
+    private String baseDao;
+
+    @XmlAttribute(name = "base-dto")
+    private String baseDto;
+
+    @XmlAttribute(name = "base-mapper")
+    private String baseMapper;
+    
+    @XmlAttribute
+    private String only;
     
 
-    @XmlElement(name = "controller")
-    private List<ControllerElements> controller = null;
+    @XmlElement(name = "table")
+    private List<TableElements> table = null;
 }

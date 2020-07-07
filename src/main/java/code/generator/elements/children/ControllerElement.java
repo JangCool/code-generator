@@ -1,4 +1,4 @@
-package code.generator.elements;
+package code.generator.elements.children;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @XmlAccessorType (XmlAccessType.FIELD)
 @Getter
 @ToString
-public class ControllerElements {
+public class ControllerElement {
 	
     @XmlAttribute
     private String name;
