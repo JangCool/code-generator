@@ -23,6 +23,10 @@ public class BasePackageElement {
     @XmlAttribute
     private String repository;
     
+    @XmlAttribute
+    private String model;
     
+    @XmlAttribute
+    private String client;
     
 }

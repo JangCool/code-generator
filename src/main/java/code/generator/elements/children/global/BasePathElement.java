@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import code.generator.common.Global;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -21,7 +22,7 @@ public class BasePathElement {
     private String source;
     
     @XmlAttribute
-    private String mappers;
+    private String resources;
     
     @XmlAttribute
     private String views;

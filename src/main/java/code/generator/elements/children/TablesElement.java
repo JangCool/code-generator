@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 @XmlRootElement(name = "controllers")
@@ -31,18 +30,17 @@ public class TablesElement {
     private String sqlsession;
     
     @XmlAttribute(name = "base-repository")
-    private String baseRepository;
+    private boolean baseRepository = true;
 
     @XmlAttribute(name = "base-model")
-    private String baseModel;
+    private boolean baseModel = true;
 
     @XmlAttribute(name = "base-mappers")
-    private String baseMapper;
+    private boolean baseMappers = true;
     
     @XmlAttribute
     private String only;
     
-
     @XmlElement(name = "table")
     private List<TableElements> table = null;
 }

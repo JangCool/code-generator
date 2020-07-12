@@ -1,5 +1,8 @@
 package code.generator.vo;
 
+import code.generator.common.Const;
+import code.generator.common.Global;
+import code.generator.elements.children.TablesElement;
 import code.generator.jdbc.DBInfo;
 import code.generator.util.UtilsText;
 
@@ -18,24 +21,71 @@ import code.generator.util.UtilsText;
  */
 public class RepositoryVO extends BaseVO {
 
+	
+	private TablesElement tablesElement;
+	
+	private TableVO tableVO;
+	
 	private DBInfo dBInfo;
 
-	private String orgDaoPkg;
-	private String business;
+	private String orgDefaultPackage;
 	private String sqlSession;
-	private String desc;
-	private String alias;
-	private String prefix;
-	private String suffix;
-	private String lock;
 
-	private String regDateColumn;
+	public RepositoryVO(TablesElement tablesElement) {
+		
+		this.tablesElement = tablesElement;
 
-	private String modDateColumn;
+		super.setDefaultPackage(
+			UtilsText.isBlank(tablesElement.getDefaultPackage()) ? 
+				Global.getBasePackage().getRepository() : tablesElement.getDefaultPackage()
+		);
+		
+		super.setBusiness(tablesElement.getBusiness());
+		super.setSuffixPackage(tablesElement.getSuffixPackage());
+		
+		this.orgDefaultPackage = super.getDefaultPackage();
+		this.sqlSession = (tablesElement.getSqlsession() == null) ? Global.getSqlSession().getName() : tablesElement.getSqlsession();
+		
+	}
 
-	private boolean baseDao;
-	private boolean baseDto;
-	private boolean baseMapper;
+	public TableVO getTableVO() {
+		return tableVO;
+	}
+
+	public void setTableVO(TableVO tableVO) {
+		this.tableVO = tableVO;
+	}
+
+	public String getOrgDefaultPackage() {
+		return orgDefaultPackage;
+	}
+	
+	/**
+	 * Repository > Dao 파일 생성 시 Base파일을 포함하여 생성할지 여부
+	 * 
+	 * @return boolean
+	 */
+	public boolean isBaseRepository() {
+		return tablesElement.isBaseRepository();
+	}
+	
+	/**
+	 * Model > Dto or Entity 파일 생성 시 Base파일을 포함하여 생성할지 여부
+	 * 
+	 * @return boolean
+	 */
+	public boolean isBaseModel() {
+		return tablesElement.isBaseModel();
+	}
+
+	/**
+	 * Mappers > Mapper 파일 생성 시 Base파일을 포함하여 생성할지 여부
+	 * 
+	 * @return boolean
+	 */
+	public boolean isBaseMappers() {
+		return tablesElement.isBaseMappers();
+	}
 
 	public DBInfo getdBInfo() {
 		return dBInfo;
@@ -45,24 +95,16 @@ public class RepositoryVO extends BaseVO {
 		this.dBInfo = dBInfo;
 	}
 
-	public String getOrgDaoPkg() {
-		return orgDaoPkg;
-	}
+	public String getDefaultPackage() {
 
-	public void setOrgDaoPkg(String orgDaoPkg) {
-		this.orgDaoPkg = orgDaoPkg;
-	}
-
-	public String getPkg() {
-
-		String returnValue = super.getPkg();
+		String returnValue = super.getDefaultPackage();
 
 		if (!UtilsText.isBlank(getBusiness())) {
 			returnValue = returnValue.concat(".").concat(getBusiness());
 		}
 
-		if (!UtilsText.isBlank(getSuffixPkg())) {
-			returnValue = returnValue.concat(".").concat(getSuffixPkg());
+		if (!UtilsText.isBlank(getSuffixPackage())) {
+			returnValue = returnValue.concat(".").concat(getSuffixPackage());
 		}
 
 		if (!UtilsText.isBlank(getSqlSession())) {
@@ -72,7 +114,7 @@ public class RepositoryVO extends BaseVO {
 		return returnValue;
 	}
 
-	public String getMapperPkg() {
+	public String getMapperPackage() {
 
 		String returnValue = "";
 
@@ -87,108 +129,12 @@ public class RepositoryVO extends BaseVO {
 		return returnValue;
 	}
 
-	public String getBusiness() {
-		return business;
-	}
-
-	public void setBusiness(String business) {
-		this.business = business;
-	}
-
 	public String getSqlSession() {
 		return sqlSession;
 	}
 
 	public void setSqlSession(String sqlSession) {
 		this.sqlSession = sqlSession;
-	}
-
-//	public String getRename() {
-//		return rename;
-//	}
-//
-//	public void setRename(String rename) {
-//		this.rename = rename;
-//	}
-
-	public String getDesc() {
-		return desc;
-	}
-
-	public String getRegDateColumn() {
-		return regDateColumn;
-	}
-
-	public void setRegDateColumn(String regDateColumn) {
-		this.regDateColumn = regDateColumn;
-	}
-
-	public String getModDateColumn() {
-		return modDateColumn;
-	}
-
-	public void setModDateColumn(String modDateColumn) {
-		this.modDateColumn = modDateColumn;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-
-	public String getAlias() {
-		return alias;
-	}
-
-	public void setAlias(String alias) {
-		this.alias = alias;
-	}
-
-	public String getPrefix() {
-		return prefix;
-	}
-
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
-
-	public String getSuffix() {
-		return suffix;
-	}
-
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
-	}
-
-	public String getLock() {
-		return lock;
-	}
-
-	public void setLock(String lock) {
-		this.lock = lock;
-	}
-
-	public boolean isBaseDao() {
-		return baseDao;
-	}
-
-	public void setBaseDao(boolean baseDao) {
-		this.baseDao = baseDao;
-	}
-
-	public boolean isBaseDto() {
-		return baseDto;
-	}
-
-	public void setBaseDto(boolean baseDto) {
-		this.baseDto = baseDto;
-	}
-
-	public boolean isBaseMapper() {
-		return baseMapper;
-	}
-
-	public void setBaseMapper(boolean baseMapper) {
-		this.baseMapper = baseMapper;
 	}
 
 }

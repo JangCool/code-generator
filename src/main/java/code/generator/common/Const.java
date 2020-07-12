@@ -10,21 +10,25 @@ public class Const {
 
 	public static final String COLUMN_AUTO_INCREMENT = "AUTO_INCREMENT";
 
+	public static final String DEFAULT_PATH_TEMPLATE = "/";
+	
 	public static final String DEFAULT_PATH_SOURCES = "src/main/java";
 
-	public static final String DEFAULT_PATH_MAPPERS = "src/main/resources/mappers";
+	public static final String DEFAULT_PATH_RESOURCES = "src/main/resources";
 
 	public static final String DEFAULT_PATH_VIEWS = "src/main/webapp/WEB-INF/views";
 
 	public static final String DEFAULT_PATH_JAVASCRIPTS = "static/js/biz";
 
-	public static final String DEFAULT_PATH_CONTROLLER_PACKAGE = "kr.co.zen9.controller";
+	public static final String DEFAULT_PATH_CONTROLLER_PACKAGE = "com.nadoosoft.controller";
 
-	public static final String DEFAULT_PATH_SERVICE_PACKAGE = "kr.co.zen9.service";
+	public static final String DEFAULT_PATH_SERVICE_PACKAGE = "com.nadoosoft.service";
 
-	public static final String DEFAULT_PATH_CLIENT_PACKAGE = "kr.co.zen9.client";
+	public static final String DEFAULT_PATH_CLIENT_PACKAGE = "com.nadoosoft.client";
 
-	public static final String DEFAULT_PATH_DAO_PACKAGE = "kr.co.zen9.dao";
+	public static final String DEFAULT_PATH_MODEL_PACKAGE = "com.nadoosoft.model";
+	
+	public static final String DEFAULT_PATH_REPOSITORY_PACKAGE = "com.nadoosoft.repository";
 
 	public static final String DEFAULT_SQL_SESSION = "master";
 

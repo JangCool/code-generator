@@ -28,6 +28,11 @@ public class ColumnsResultSet {
 
 	private static final String SQL_MARIA_TABLE_PK_COLUMN = "SELECT * FROM (SELECT column_name,data_type,column_key as pk, ordinal_position, column_comment as comments, CASE WHEN EXTRA = 'auto_increment' THEN 'Y' ELSE '' END AS auto_increment FROM information_schema.columns WHERE table_schema = SCHEMA() AND table_name = ?) t WHERE t.pk = \"PRI\" ORDER BY ordinal_position";
 
+	private static final String SQL_H2DB_TABLE_COLUMN = "SELECT column_name,type_name as data_type,ordinal_position, remarks as comments, CASE WHEN sequence_name is not null THEN 'Y' ELSE '' END AS auto_increment FROM information_schema.columns WHERE table_schema = SCHEMA() AND table_name = ? ORDER BY ordinal_position";
+
+	private static final String SQL_H2DB_TABLE_CONSTRAINTS = "SELECT COLUMN_LIST FROM INFORMATION_SCHEMA.CONSTRAINTS WHERE  table_schema = SCHEMA() AND CONSTRAINT_TYPE='PRIMARY KEY' AND TABLE_NAME=?";
+	
+
 	private DBConnection connection;
 
 	private List<Map<String, String>> columns;
@@ -154,6 +159,99 @@ public class ColumnsResultSet {
 			DBUtil.close(pstmt);
 		}
 	}
+	
+	public void callH2DBColumn(String tableName) {
+
+		clearColumns();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		PreparedStatement constPstmt = null;
+		ResultSet constRs = null;
+
+		PreparedStatement pkPstmt = null;
+		ResultSet pkRs = null;
+		
+		
+		try {
+			pstmt = connection.getConnection().prepareStatement(SQL_H2DB_TABLE_COLUMN);
+			pstmt.setString(1, tableName);
+
+			rs = pstmt.executeQuery();
+
+			setColumnsResultSet(rs);
+			
+
+			constPstmt = connection.getConnection().prepareStatement(SQL_H2DB_TABLE_CONSTRAINTS);
+			constPstmt.setString(1, tableName);
+
+			constRs = constPstmt.executeQuery();
+			
+			if(constRs.next()) {		
+			
+				Log.debug(SQL_H2DB_TABLE_CONSTRAINTS);
+				Log.debug(tableName);
+				
+				String columnList = constRs.getString("COLUMN_LIST");
+				
+				if(!UtilsText.isBlank(columnList)) {
+					
+					String[] columnArr = columnList.split("\\,");
+					
+					StringBuilder query = new StringBuilder();
+					
+					query.append("SELECT column_name,type_name as data_type,ordinal_position, remarks as comments, CASE WHEN sequence_name is not null THEN 'Y' ELSE '' END AS auto_increment FROM information_schema.columns WHERE table_schema = SCHEMA() AND table_name = ?  AND column_name in (");
+					
+					if(columnArr != null && columnArr.length > 0) {
+						
+						int i = 0 ;
+						int columnArrLength = columnArr.length;
+						
+						for (String columnName : columnArr) {
+							
+							if(i == 0 ) {
+								query.append("?");							
+							}else {
+								query.append(",?");
+							}
+							
+							i++;
+						}
+	
+						query.append(") ORDER BY ordinal_position");
+						
+						Log.debug(query.toString());
+						pkPstmt = connection.getConnection().prepareStatement(query.toString());
+						
+						int c = 1;
+						pkPstmt.setString(c++, tableName);	
+
+						for (String column : columnArr) {
+							pkPstmt.setString(c++, column);	
+						}
+						
+						pkRs = pkPstmt.executeQuery();
+	
+					}
+	
+					setPKColumnsResultSet(pkRs);
+				}
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+			DBUtil.close(constRs);
+			DBUtil.close(constPstmt);
+			DBUtil.close(pkRs);
+			DBUtil.close(pkPstmt);
+		}
+	}
+
+	
 
 	private void setColumnsResultSet(ResultSet rs) throws SQLException {
 		setColumnsResultSet(rs, null);

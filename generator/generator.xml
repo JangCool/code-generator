@@ -7,69 +7,29 @@
 	</properties>
 
 	<!-- db 접속 정보 설정 -->
-	<jdbc
+<!-- 	<jdbc
 		url="jdbc:mysql://db.zen9.com:53306/missha?characterEncoding=utf8&amp;serverTimezone=Asia/Seoul"
 		driver-class="com.mysql.jdbc.Driver"
 		username="missha"
 		password="missha2019!@"
+	/> -->
+	<jdbc
+		url="jdbc:h2:tcp://localhost/~/test"
+		driver-class="org.h2.Driver"
+		username="sa"
+		password=""
 	/>
 
-	<global>
-		<base-package 
-			controller = "${package.base}"
-			service = "${package.base}"
-			target = "${package.base}"
-		/>
-	</global>
-
-	<!-- start member -->
-   <controllers business="member" suffix-package="controller">
-      <controller name="Member" />
-   </controllers>
-   
-   <controllers business="SS" suffix-package="controller">
-      <controller name="SS" />
-   </controllers>
-   
-
-   <services business="order" suffix-package="service" proxy-target-class="true">   
-      <service name="BaseOrder"></service>
-   </services>
-
-<!--     <tables business="common" suffix-package="repository"> -->
-<!--        <table name="CM_SITE" desc="사이트 관리" /> -->
-<!--     </tables> -->
-    
-   <!-- end member -->
-   
-	<!--  Start of Marketing -->
-	<!--
-	<services business="marketing" suffix-package="service" proxy-target-class="true">   
-	    <service name="BaseMarketing"/>
-	    <service name="BasePromotion"/>
-	    <service name="BaseEvent"/>
-	</services>
-	<tables business="marketing" suffix-package="repository">
-	    <table name="MK_PRMO" desc="프로모션" />
-	    <table name="MK_PRMO_BENF_TGT" desc="프로모션 혜택 대상" />
-	    <table name="MK_PRMO_PAY_STEP" desc="프로모션 지급 단계" />
-	    <table name="MK_PRMO_PAY_TGT" desc="프로모션 지급 대상" />
-	    <table name="MK_CPN_AUTHN" desc="쿠폰 인증" />
-	</tables>
-	<services business="member" suffix-package="service" proxy-target-class="true">   
-	    <service name="BaseMemberCoupon"/>
-	</services>
-	<tables business="member" suffix-package="repository">
-	    <table name="MB_MBR_CPN" desc="회원 쿠폰" />
-	</tables>
-	-->
-	<!--  End of Marketing -->
+<!-- 	<global> -->
+<!-- 		<base-package  -->
+<!-- 			controller = "${package.base}" -->
+<!-- 			service = "${package.base}" -->
+<!-- 			target = "${package.base}" -->
+<!-- 		/> -->
+<!-- 	</global> -->
 	
-	<tables business="order" suffix-package="repository">
-		<table name="OD_ORD_GOODS"  desc="OD_주문상품" />
+	<tables business="sample" suffix-package="repository">
+		<table name="TEST"  desc="테스트" />
 	</tables>
-	
-	
-
 
 </configuration>

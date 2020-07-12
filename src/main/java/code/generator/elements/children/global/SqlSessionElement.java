@@ -15,7 +15,7 @@ import lombok.ToString;
 public class SqlSessionElement {
 	
     @XmlAttribute
-    private String target;
+    private String name;
     
     
 }

@@ -3,8 +3,8 @@ package code.generator.vo;
 public class BaseVO {
 
 	private String business;
-	private String pkg;
-	private String suffixPkg;
+	private String defaultPackage;
+	private String suffixPackage;
 
 	public String getBusiness() {
 		return business;
@@ -12,17 +12,21 @@ public class BaseVO {
 	public void setBusiness(String business) {
 		this.business = business;
 	}
-	public String getPkg() {
-		return pkg;
+	
+	public String getDefaultPackage() {
+		return defaultPackage;
 	}
-	public void setPkg(String pkg) {
-		this.pkg = pkg;
+	
+	public void setDefaultPackage(String defaultPackage) {
+		this.defaultPackage = defaultPackage;
 	}
-	public String getSuffixPkg() {
-		return suffixPkg;
+	
+	public String getSuffixPackage() {
+		return suffixPackage;
 	}
-	public void setSuffixPkg(String suffixPkg) {
-		this.suffixPkg = suffixPkg;
+	
+	public void setSuffixPackage(String suffixPackage) {
+		this.suffixPackage = suffixPackage;
 	}
 
 }

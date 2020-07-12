@@ -245,5 +245,14 @@ public class UtilsText {
 		String replacement = "$1-$2";
 		return camelCase.replaceAll(regex, replacement).toLowerCase();
 	}
+
+	/**
+	 * 첫번쨰 문자를 소문자로 변경
+	 * @param input
+	 * @return
+	 */
+	public static String convertFirstLowerCase(String input) {
+		return Character.toLowerCase(input.charAt(0)) + input.substring(1);
+	}
     
 }

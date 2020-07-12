@@ -10,10 +10,14 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 
+import code.generator.common.Global;
+import code.generator.common.Log;
 import code.generator.elements.ConfigurationElement;
 import code.generator.jdbc.ColumnsResultSet;
 import code.generator.jdbc.DBConnection;
 import code.generator.jdbc.DBInfo;
+import code.generator.make.BaseMake;
+import code.generator.make.MakeTable;
 
 public class CodeGenerator {
 	
@@ -50,6 +54,11 @@ public class CodeGenerator {
 	public static void main(String[] args) {
 		try {
 			ConfigurationElement configurationElement = initParser();
+			
+			//global값 설정
+			Global.init(configurationElement.getGlobal());
+			
+			Log.debug(configurationElement);
 //			  
 //			
 //			BaseMake processController = new MakeController(xmlParser);
@@ -74,7 +83,11 @@ public class CodeGenerator {
 			DBInfo dbInfo = new DBInfo(configurationElement.getJdbc());
 			 
 			DBConnection dbConn = new DBConnection(dbInfo);
-			ColumnsResultSet processSql = new ColumnsResultSet(dbConn);
+			ColumnsResultSet columnsResultSet = new ColumnsResultSet(dbConn);
+			
+			BaseMake processDao = new MakeTable(configurationElement,columnsResultSet);
+			processDao.generator();
+			
 			dbConn.close();
 
 		    

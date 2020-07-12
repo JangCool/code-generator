@@ -1,3 +1,5 @@
+<#assign TableOperation=statics["code.generator.make.TableOperation"]>
+
 package ${package}.base;
 
 import java.util.List;
@@ -19,12 +21,27 @@ public interface Base${fileName}Dao {
      * 이 select 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
 	
-	${fileName} selectByPrimaryKey(${fileName} ${field}) throws Exception;
+	${fileName} findByPrimaryKey(${fileName} ${field}) throws Exception;
+<#if pkColumns??>
+	<#list pkColumns as column>
+	    ${column.COLUMN_NAME}
+	    ${column.DATA_TYPE}
+	    ${TableOperation.javaType('${column.DATA_TYPE}')}
+	</#list>
+</#if>
+
+
+
+	    /**
+     * 이 select 메소드는 Code Generator를 통하여 생성 되었습니다.
+     */
+	List<${fileName}> findAll() throws Exception;
 	
     /**
      * 이 select 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
-	List<${fileName}> select(${fileName} ${field}) throws Exception;
+	List<${fileName}> findBy(${fileName} ${field}) throws Exception;
+	
 	
     /**
      * 이 select 메소드는 Code Generator를 통하여 생성 되었습니다.

@@ -27,6 +27,7 @@ configurations {
  -----------------------------------------------------------------------------------------------------------*/
 dependencies {
 
+	implementation files("lib/h2-1.4.200.jar")
 	implementation 'org.freemarker:freemarker:2.3.30'
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 	implementation 'com.sun.xml.bind:jaxb-impl:2.3.1'

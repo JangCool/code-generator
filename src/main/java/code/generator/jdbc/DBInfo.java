@@ -9,6 +9,7 @@ public class DBInfo {
 	private static final String MSSQL_DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 	private static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
 	private static final String MARIA_DRIVER = "org.mariadb.jdbc.Driver";
+	private static final String H2_DRIVER = "org.h2.Driver";
 	
 	
 	private String driver;
@@ -73,5 +74,8 @@ public class DBInfo {
 		return (MARIA_DRIVER.equals(driver));
 	}
 	
+	public boolean isH2() {
+		return (H2_DRIVER.equals(driver));
+	}
 	
 }

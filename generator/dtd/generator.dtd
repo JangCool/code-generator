@@ -33,32 +33,30 @@
 	
 
 <!-- global 엘리먼트 정의-->		
-<!ELEMENT global (sql-session?,controllerpkg?,servicepkg?,daopkg?,path?,default-date?)>
+<!ELEMENT global (sql-session?,base-backage?,base-path?,exclude-column?)>
 	<!ELEMENT sql-session EMPTY>
 		<!ATTLIST sql-session
 			name CDATA #REQUIRED
-			use ( Y | N ) #IMPLIED
 		>
 	<!ELEMENT base-backage EMPTY>
 		<!ATTLIST base-backage
 			controller CDATA #REQUIRED
 			service CDATA #REQUIRED
 			repository CDATA #REQUIRED
+			model CDATA #REQUIRED
+			client CDATA #REQUIRED
 		>
 	<!ELEMENT base-path EMPTY>
 		<!ATTLIST base-path
 			template CDATA #REQUIRED
 			source CDATA #REQUIRED
-			mappers CDATA #REQUIRED
+			resources CDATA #REQUIRED
 			views CDATA #REQUIRED
 			javascripts CDATA #REQUIRED
 	<!ELEMENT exclude-column EMPTY>
-		<!ATTLIST path
+		<!ATTLIST exclude-column
 			insert CDATA #REQUIRED
 			update CDATA #REQUIRED
-			mappers CDATA #REQUIRED
-			views CDATA #REQUIRED
-			javascripts CDATA #REQUIRED
 
 <!-- controllers 엘리먼트 정의-->		
 <!ELEMENT controllers (controller*)>
@@ -124,7 +122,7 @@
 		base-repository (true | false) #IMPLIED
 		base-model (true | false) #IMPLIED
 		base-mappers (true | false) #IMPLIED
-		only (model | repository | mapper) #IMPLIED
+		only (model | dao | mappers) #IMPLIED
 	>
 	<!ELEMENT table (column*)>
 	<!ATTLIST table

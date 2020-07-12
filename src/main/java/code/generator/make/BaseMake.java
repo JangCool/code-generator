@@ -3,47 +3,60 @@ package code.generator.make;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Map;
+
+import org.h2.util.StringUtils;
 
 import code.generator.CodeGenerator;
 import code.generator.common.Config;
-import code.generator.common.Global;
+import code.generator.common.Const;
 import code.generator.common.Log;
-import code.generator.parser.XmlParser;
+import code.generator.elements.ConfigurationElement;
 import code.generator.util.UtilsText;
+import freemarker.ext.beans.BeansWrapper;
+import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
+import freemarker.template.TemplateHashModel;
 
 public abstract class BaseMake {
 
-	protected XmlParser xmlParser;
+	protected ConfigurationElement configuration;
 
-	protected Configuration cfg;
+	protected Configuration freemarkerConfiguration;
+	
+	private String templatePath;
+	
+	private String sourcePath = Const.DEFAULT_PATH_SOURCES;
 	
 	private File directoryForTemplate;
-	
-	private File pathSources = new File(Global.getPath().getSource());
 
-	private File pathMappers = new File(Global.getPath().getMapper());
-	
-	private File pathViews = new File(Global.getPath().getView());
-
-	private File pathJavascripts = new File(Global.getPath().getJavascript());
-
-	private String daoPkg = Global.getDaoPkg();
-	
 	public BaseMake() {
 		this(null);
 	}
 	
-	public BaseMake(XmlParser xmlParser) {
+	public ConfigurationElement getConfiguration() {
+		return configuration;
+	}
+
+	public String getTemplatePath() {
+		return templatePath;
+	}
+
+	public BaseMake(ConfigurationElement configuration) {
 		
-		this.xmlParser = xmlParser;
-		this.cfg = new Configuration(Configuration.VERSION_2_3_28);
-		cfg.setDefaultEncoding("UTF-8");
-		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+		this.configuration = configuration;
 		
+		if (configuration.getGlobal() != null && configuration.getGlobal().getBasePath() != null ) {
+			this.templatePath = configuration.getGlobal().getBasePath().getTemplate();
+		}
+		
+		this.freemarkerConfiguration = new Configuration(Configuration.VERSION_2_3_28);
+		freemarkerConfiguration.setDefaultEncoding("UTF-8");
+		freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+
 		init();
 	}
 	
@@ -53,7 +66,7 @@ public abstract class BaseMake {
 
 	public void setDirectoryForTemplate(File directoryForTemplate) throws Exception {
 		this.directoryForTemplate = directoryForTemplate;
-		cfg.setDirectoryForTemplateLoading(directoryForTemplate);
+		freemarkerConfiguration.setDirectoryForTemplateLoading(directoryForTemplate);
 	}
 	
 	
@@ -68,35 +81,16 @@ public abstract class BaseMake {
 	private void init() {
 				
 		try {
-			if(Global.getPath().getTemplate() != null) {
-					setDirectoryForTemplate(new File(Global.getPath().getTemplate()));
+			if(templatePath != null) {
+					setDirectoryForTemplate(new File(templatePath));
 			}else {
-				cfg.setClassForTemplateLoading(CodeGenerator.class,"/");
+				freemarkerConfiguration.setClassForTemplateLoading(CodeGenerator.class,"/");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public File getPathSources() {
-		return pathSources;
-	}
-
-	public File getPathMappers() {
-		return pathMappers;
-	}
-	
-	public String getDaoPkg() {
-		return daoPkg;
-	}
-
-	public File getPathViews() {
-		return pathViews;
-	}
-
-	public File getPathJavascripts() {
-		return pathJavascripts;
-	}
 
 	/**
 	 * 템플릿 파일을 이용하여 Local 경로에 파일을 생성한다.
@@ -106,9 +100,13 @@ public abstract class BaseMake {
 	 * @param data
 	 * @throws Exception
 	 */
-	public void writeTemplate(String templateFileName,String folder,String path ,Map data) throws Exception {
+	public void writeTemplate(String templateFileName,String folder,String path ,Map<String, Object> data) throws Exception {
 		
-		Template template = cfg.getTemplate(UtilsText.concat("template/",templateFileName,".ftl"));
+		BeansWrapper beansWrapper = new BeansWrapperBuilder(Configuration.VERSION_2_3_29).build();
+		//Freemarker에서 정적 클래스를 호출하라면 아래와 같이 추가하여 준다.
+		data.put("statics", beansWrapper.getStaticModels());
+		
+		Template template = freemarkerConfiguration.getTemplate(UtilsText.concat("template/",templateFileName,".ftl"));
 
 		File makeTargetDirectory = new File(folder);
 		
@@ -125,7 +123,7 @@ public abstract class BaseMake {
 		if( !(new File(path).isFile() && !templateFileName.startsWith("Base")) ) {
 			
 			Writer file = new FileWriter (path);
-			template.process(data, file);
+			template.process(data, file, beansWrapper);
 		    file.flush();
 		    file.close();
 		    
