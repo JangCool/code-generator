@@ -3,14 +3,10 @@ package code.generator.make;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.Map;
-
-import org.h2.util.StringUtils;
 
 import code.generator.CodeGenerator;
 import code.generator.common.Config;
-import code.generator.common.Const;
 import code.generator.common.Log;
 import code.generator.elements.ConfigurationElement;
 import code.generator.util.UtilsText;
@@ -19,7 +15,6 @@ import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.TemplateHashModel;
 
 public abstract class BaseMake {
 
@@ -28,8 +23,6 @@ public abstract class BaseMake {
 	protected Configuration freemarkerConfiguration;
 	
 	private String templatePath;
-	
-	private String sourcePath = Const.DEFAULT_PATH_SOURCES;
 	
 	private File directoryForTemplate;
 

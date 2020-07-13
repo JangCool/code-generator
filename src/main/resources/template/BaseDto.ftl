@@ -2,10 +2,10 @@ package ${package}.base;
 
 import lombok.Data;
 import java.io.Serializable;
-import com.zen9.rivendell.core.bean.BaseBean;
+import kr.co.pionnet.butterfly.core.core.bean.BaseBean;
 
 /**
- * 테이블 명  : ${tableName}
+ * 테이블 명  : ${name}
  * 설명        : ${desc}
  */
 @Data

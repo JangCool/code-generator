@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 테이블 명  : ${tableName}
+ * 테이블 명  : ${name}
  * 설명        : ${desc}
  *
  * ※ 기본 적으로 Base파일에 DB TABLE 컬럼명으로 각 field를 전부 생성해주지만 별도로 추가해야 할 상황에서는 직접 field를 추가 한다.

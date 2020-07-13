@@ -1,22 +1,22 @@
 package code.generator.make;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import code.generator.common.Const;
 import code.generator.common.Global;
 import code.generator.common.Log;
 import code.generator.elements.ConfigurationElement;
-import code.generator.elements.children.TableElements;
+import code.generator.elements.children.TableElement;
 import code.generator.elements.children.TablesElement;
 import code.generator.exception.NoneTableNameException;
 import code.generator.jdbc.ColumnsResultSet;
 import code.generator.jdbc.DBInfo;
 import code.generator.util.UtilsDate;
 import code.generator.util.UtilsText;
-import code.generator.vo.RepositoryVO;
-import code.generator.vo.TableVO;
 
 //package code.generator.make;
 //
@@ -91,8 +91,8 @@ public class MakeTable extends BaseMake {
 	@Override
 	public void generator(String name) throws Exception {
 		
-		List<TablesElement> tables = getConfiguration().getTables();
-		int tablesLength = tables.size();
+		List<TablesElement> tablesList = getConfiguration().getTables();
+		int tablesLength = tablesList.size();
 
 		Log.println("");
 		
@@ -112,25 +112,24 @@ public class MakeTable extends BaseMake {
 		Log.debug("");
 
 		
-		for (TablesElement tablesElement : tables) {
+		for (TablesElement tables : tablesList) {
 //			Log.debug(tablesElement);
 			
 			// 지정된 값만 생성 한다. model, dao, mappers
-			String only = tablesElement.getOnly();
+			String only = tables.getOnly();
 			
-			RepositoryVO repositoryVO = new RepositoryVO(tablesElement);
 			
 			Log.debug("================================================================================================");
-			Log.debug("sqlSession		 = " + repositoryVO.getSqlSession());
-			Log.debug("business   		 = " + repositoryVO.getBusiness());
-			Log.debug("package    		 = " + repositoryVO.getDefaultPackage());
-			Log.debug("suffix-package    = " + repositoryVO.getSuffixPackage());
+			Log.debug("sqlSession		 = " + tables.getSqlSession());
+			Log.debug("business   		 = " + tables.getBusiness());
+			Log.debug("package    		 = " + tables.getDefaultPackage());
+			Log.debug("suffix-package    = " + tables.getSuffixPackage());
 			Log.debug("================================================================================================");
 			
 			
-			List<TableElements> tableList = tablesElement.getTable();
+			List<TableElement> tableList = tables.getTable();
 			
-			for (TableElements table : tableList) {
+			for (TableElement table : tableList) {
 				
 				String orgTableName = table.getName();
 
@@ -146,13 +145,11 @@ public class MakeTable extends BaseMake {
 					continue;
 				}
 				
-				repositoryVO.setTableVO(new TableVO(table));
-				
 				
 				if (UtilsText.isBlank(only)) {
 
-					createRepository(repositoryVO);
-//					createModel(gv, orgTableName, rename, fileName);
+					createRepository(tables, table);
+					createModel(tables, table);
 //					// rename, prefix 는 쿼리 내용도 적용될 필요가 없다. 가공되지 않은 원본 테에블명 넘긴다.
 //					createMapper(gv, orgTableName, element.getAttribute("name"), fileName,
 //							element.getElementsByTagName("column"));
@@ -183,43 +180,115 @@ public class MakeTable extends BaseMake {
 	 * @param gv           생성에 필요한 정보를 담고 있는 GeneratorVO 객체
 	 * @throws Exception
 	 */
-	private void createRepository(RepositoryVO repositoryVO) throws Exception {
+	private void createRepository(TablesElement tables, TableElement table) throws Exception {
 
-		
+		List<Map<String, String>> columns = columnsResultSet.getColumns();
 		List<Map<String, String>> pkColumns = columnsResultSet.getPrimaryColumns();
 
 		
-		TableVO tableVO = repositoryVO.getTableVO();
-		String fileName = tableVO.getFileName();
-		String defaultPackage = repositoryVO.getDefaultPackage();
+		String fileName = table.getFileName();
+		String defaultPackage = tables.getDefaultPackage();
 		
 		String field = UtilsText.convertFirstLowerCase(fileName);
 
 		Map<String, Object> data = new HashMap<>();
 		data.put("fileName", fileName);
-		data.put("package", repositoryVO.getDefaultPackage());
+		data.put("package", tables.getDefaultPackage());
 		data.put("model", UtilsText.concat(replaceModelPackage(defaultPackage), ".", fileName));
 		data.put("mapperid", UtilsText.concat(defaultPackage, ".", fileName));
 		data.put("field", field);
 		data.put("date", UtilsDate.today(UtilsDate.DEFAULT_DATETIME_PATTERN));
-		data.put("sqlsession", UtilsText.capitalize(repositoryVO.getSqlSession()));
-		data.put("tableName", tableVO.getOrgTableName());
-		data.put("desc", tableVO.getDesc());
+		data.put("sqlsession", UtilsText.capitalize(tables.getSqlSession()));
+		data.put("name", table.getName());
+		data.put("desc", table.getDesc());
+		data.put("table", table);
+		data.put("columns", columns);
 		data.put("pkColumns", pkColumns);
-
+		data.put("findByPrimaryKey", Sql.findByPrimaryKey(tables, table, columns, pkColumns));
+		data.put("findAll", Sql.findAll(tables, table, columns, pkColumns));
+		data.put("findBy", Sql.findBy(tables, table, columns, pkColumns));
+		data.put("insert", Sql.insert(tables, table, columns, pkColumns));
+		
 		String folder = UtilsText.concat(new File(Global.getBasePath().getSource()).getAbsolutePath(), File.separator, defaultPackage.replace(".", "/"));
 		String path = UtilsText.concat(folder, File.separator, fileName, "Dao.java");
 
 		String baseFolder = UtilsText.concat(folder, File.separator, "base");
 		String basePath = UtilsText.concat(baseFolder, File.separator, "Base", fileName, "Dao.java");
 
-		if (repositoryVO.isBaseRepository()) {
+		if (tables.isBaseRepository()) {
 			writeTemplate("BaseDao", baseFolder, basePath, data);
 			writeTemplate("Dao", folder, path, data);
 		} else {
 			writeTemplate("DaoNotExtend", folder, path, data);
 		}
 
+	}
+	
+	/**
+	 * model 파일을 생성 한다.
+	 * 
+	 * @param gv           생성에 필요한 정보를 담고 있는 GeneratorVO 객체
+	 * @param orgTableName db에 존재하는 테이블명
+	 * @param tableName    camelcase로 변형된 테이블 명.
+	 * @throws Exception
+	 */
+	private void createModel(TablesElement tables, TableElement table) throws Exception {
+
+		List<Map<String, String>> columns = columnsResultSet.getColumns();
+		List<Map<String, String>> pkColumns = columnsResultSet.getPrimaryColumns();
+
+		String fileName = table.getFileName();
+		String defaultPackage = tables.getDefaultPackage();
+		
+		String modelPackage = replaceModelPackage(defaultPackage);
+		
+		System.out.println(modelPackage);
+
+		Map<String, Object> data = new HashMap<>();
+		data.put("fileName", fileName);
+		data.put("package", modelPackage);
+		data.put("model", dto(table, columns, pkColumns));
+		data.put("date", UtilsDate.today(UtilsDate.DEFAULT_DATETIME_PATTERN));
+		data.put("name", table.getName());
+		data.put("desc", table.getDesc());
+
+		String folder = UtilsText.concat(new File(Global.getBasePath().getSource()).getAbsolutePath(), File.separator, modelPackage.replace(".", "/"));
+		String path = UtilsText.concat(folder, File.separator, fileName, ".java");
+
+		String baseFolder = UtilsText.concat(folder, File.separator, "base");
+		String basePath = UtilsText.concat(baseFolder, File.separator, "Base", fileName, ".java");
+
+		if (tables.isBaseModel()) {
+			writeTemplate("BaseDto", baseFolder, basePath, data);
+			writeTemplate("Dto", folder, path, data);
+		} else {
+			writeTemplate("DtoNotExtend", folder, path, data);
+		}
+
+	}
+	
+	public static List<Map<String, String>> dto( TableElement table, List<Map<String, String>> columns, List<Map<String, String>> pkColumns) {
+		
+		List<Map<String, String>> fieldList = new ArrayList<>();
+		
+		for (Map<String, String> column : columns) {
+			
+			String orgColumnName = column.get("COLUMN_NAME").toUpperCase();
+			String field = UtilsText.convert2CamelCase(orgColumnName);				
+			String field2 = UtilsText.convert2CamelCaseTable(orgColumnName);				
+			String dataType = column.get("DATA_TYPE");
+			String comment = column.get(Const.COLUMN_COMMENT);
+			
+			Map<String,String> fieldMap = new HashMap<>();
+			fieldMap.put("field", field);
+			fieldMap.put("field2", field2);
+			fieldMap.put("comment", comment);
+			fieldMap.put("javaType", Sql.javaType(dataType));
+			
+			fieldList.add(fieldMap);
+		}
+		
+		return fieldList;
 	}
 //
 //	/**
@@ -271,44 +340,6 @@ public class MakeTable extends BaseMake {
 //		}
 //	}
 //
-//	/**
-//	 * model 파일을 생성 한다.
-//	 * 
-//	 * @param gv           생성에 필요한 정보를 담고 있는 GeneratorVO 객체
-//	 * @param orgTableName db에 존재하는 테이블명
-//	 * @param tableName    camelcase로 변형된 테이블 명.
-//	 * @throws Exception
-//	 */
-//	public void createModel(RepositoryVO gv, String orgTableName, String rename, String fileName) throws Exception {
-//
-//		List<Map<String, String>> columns = processSql.getColumns();
-//		List<Map<String, String>> pkColumns = processSql.getPrimaryColumns();
-//
-//		String pkgModel = replaceModelPackage(gv.getPkg());
-//
-//		Map<String, Object> data = new HashMap<>();
-//		data.put("fileName", fileName);
-//		data.put("package", pkgModel);
-//		data.put("model", PreparedDto.dto(orgTableName, pkgModel, columns, pkColumns));
-//		data.put("date", UtilsDate.today(UtilsDate.DEFAULT_DATETIME_PATTERN));
-//		data.put("tableName", orgTableName);
-//		data.put("desc", gv.getDesc());
-//
-//		String folder = UtilsText.concat(getPathSources().getAbsolutePath(), File.separator,
-//				pkgModel.replace(".", "/"));
-//		String path = UtilsText.concat(folder, File.separator, fileName, ".java");
-//
-//		String baseFolder = UtilsText.concat(folder, File.separator, "base");
-//		String basePath = UtilsText.concat(baseFolder, File.separator, "Base", fileName, ".java");
-//
-//		if (gv.isBaseDto()) {
-//			writeTemplate("BaseDto", baseFolder, basePath, data);
-//			writeTemplate("Dto", folder, path, data);
-//		} else {
-//			writeTemplate("DtoNotExtend", folder, path, data);
-//		}
-//
-//	}
 //
 	/**
 	 * Dao를 만든 직후 Dto도 만들기 위해 패키지명 .dto로 변경 한다.

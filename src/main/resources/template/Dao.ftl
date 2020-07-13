@@ -5,7 +5,7 @@ import ${package}.base.Base${fileName}Dao;
 import ${model};
 
 /**
- * 테이블 명 : ${tableName}
+ * 테이블 명 : ${table.name}
  * 설명       : ${desc}
  */
 @Mapper

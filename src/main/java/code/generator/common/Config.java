@@ -2,11 +2,6 @@ package code.generator.common;
 
 import java.util.Properties;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import code.generator.parser.XmlParser;
 import code.generator.util.UtilsText;
 
 
@@ -17,26 +12,26 @@ public class Config {
     private static Properties env = new Properties();
 	
 
-    public static void loadConfiguration(XmlParser xp) {
-    	
-        try {
-
-    		NodeList nodeList = xp.getDoc().getElementsByTagName("properties").item(0).getChildNodes();
-    		int nodeListLength = nodeList.getLength();
-    		
-    		for (int i = 0; i < nodeListLength; i++) {
-    			if(nodeList.item(i).getNodeType() == Node.ELEMENT_NODE){
-			  		Element element = (Element) nodeList.item(i);
-	    			if("property".equals(element.getTagName())){					
-						env.setProperty(element.getAttribute("key"), element.getAttribute("value"));
-					}
-				}
-			}
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public static void loadConfiguration(XmlParser xp) {
+//    	
+//        try {
+//
+//    		NodeList nodeList = xp.getDoc().getElementsByTagName("properties").item(0).getChildNodes();
+//    		int nodeListLength = nodeList.getLength();
+//    		
+//    		for (int i = 0; i < nodeListLength; i++) {
+//    			if(nodeList.item(i).getNodeType() == Node.ELEMENT_NODE){
+//			  		Element element = (Element) nodeList.item(i);
+//	    			if("property".equals(element.getTagName())){					
+//						env.setProperty(element.getAttribute("key"), element.getAttribute("value"));
+//					}
+//				}
+//			}
+//
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     public static String getString(String key) {
         String propertiesValue = env.getProperty(key);

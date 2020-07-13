@@ -31,5 +31,10 @@
 	<tables business="sample" suffix-package="repository">
 		<table name="TEST"  desc="테스트" />
 	</tables>
-
+<!-- 	<tables business="sample" suffix-package="repository"> -->
+<!-- 		<table name="TEST"  desc="테스트" alias="t"> -->
+<!-- 			<column name="ID" typeHandler="TestHandler" /> -->
+<!-- 			<column name="U_NO" alias="UID" typeHandler="TestHandler" /> -->
+<!-- 		</table> -->
+<!-- 	</tables> -->
 </configuration>

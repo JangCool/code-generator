@@ -8,12 +8,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import lombok.Getter;
+import code.generator.common.Global;
+import code.generator.util.UtilsText;
+import lombok.Setter;
 import lombok.ToString;
 
 @XmlRootElement(name = "controllers")
 @XmlAccessorType(XmlAccessType.FIELD)
-@Getter
+@Setter
 @ToString
 public class TablesElement {
 	
@@ -26,8 +28,8 @@ public class TablesElement {
     @XmlAttribute(name = "suffix-package")
     private String suffixPackage;
     
-    @XmlAttribute
-    private String sqlsession;
+    @XmlAttribute(name = "sqlsession")
+    private String sqlSession;
     
     @XmlAttribute(name = "base-repository")
     private boolean baseRepository = true;
@@ -42,5 +44,46 @@ public class TablesElement {
     private String only;
     
     @XmlElement(name = "table")
-    private List<TableElements> table = null;
+    private List<TableElement> table = null;
+
+    
+	public String getBusiness() {
+		return business;
+	}
+
+	public String getDefaultPackage() {
+		return UtilsText.isBlank(this.defaultPackage) ? Global.getBasePackage().getRepository() : this.defaultPackage;
+	}
+
+	public String getSuffixPackage() {
+		return suffixPackage;
+	}
+
+	public String getSqlSession() {
+		
+		return (this.sqlSession == null) ? Global.getSqlSession().getName() : this.sqlSession;
+	}
+
+	public boolean isBaseRepository() {
+		return baseRepository;
+	}
+
+	public boolean isBaseModel() {
+		return baseModel;
+	}
+
+	public boolean isBaseMappers() {
+		return baseMappers;
+	}
+
+	public String getOnly() {
+		return only;
+	}
+
+	public List<TableElement> getTable() {
+		return table;
+	}
+    
+    
+    
 }
