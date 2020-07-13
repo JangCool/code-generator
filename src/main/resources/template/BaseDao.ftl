@@ -25,33 +25,30 @@ import ${model};
 public interface Base${fileName}Dao {
 
     /**
-     * 이 find 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 findByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${findByPrimaryKey}
 	${fileName} findByPrimaryKey(<#if pkColumns??><#list pkColumns as column><#if column_index gt 0 > ,</#if>@Param("${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}") ${TableOperation.javaType('${column.DATA_TYPE}')} ${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}</#list></#if>) throws Exception;
 
-
     /**
-     * 이 find 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 findByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${findByPrimaryKey}
 	${fileName} findByPrimaryKey(${fileName} ${field}) throws Exception;
 
-
     /**
-     * 이 find 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 findAll 메소드는 Code Generator를 통하여 생성 되었습니다.
      * !!!! 데이터 양이 많지 않은 경우에만 사용하시기 바랍니다. !!!!
      */
     ${findAll}
 	List<${fileName}> findAll() throws Exception;
 	
     /**
-     * 이 find 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 findBy 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
      ${findBy}
 	List<${fileName}> findBy(${fileName} ${field}) throws Exception;
-	
-	
+		
     /**
      * 이 select 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
@@ -59,14 +56,28 @@ public interface Base${fileName}Dao {
 	int insert(${fileName} ${field}) throws Exception;
 	
     /**
-     * 이 select 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 update 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
+    ${update}
 	int update(${fileName} ${field}) throws Exception;
 	
 	 /**
-     * 이 select 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 deleteByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
-	int delete(${fileName} ${field}) throws Exception;
+    ${delete} 
+	int deleteByPrimaryKey(<#if pkColumns??><#list pkColumns as column><#if column_index gt 0 > ,</#if>@Param("${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}") ${TableOperation.javaType('${column.DATA_TYPE}')} ${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}</#list></#if>) throws Exception;
 
+	/**
+     * 이 deleteByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
+     */
+    ${delete} 
+	int deleteByPrimaryKey(${fileName} ${field}) throws Exception;
+	
+	/**
+     * 이 deleteAll 메소드는 Code Generator를 통하여 생성 되었습니다.
+     */
+    ${deleteAll} 
+	int deleteAll(${fileName} ${field}) throws Exception;
+	
 
 }

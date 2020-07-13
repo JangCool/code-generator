@@ -113,7 +113,8 @@ public class MakeTable extends BaseMake {
 
 		
 		for (TablesElement tables : tablesList) {
-//			Log.debug(tablesElement);
+			
+			tables.setDBInfo(columnsResultSet.getDbInfo());
 			
 			// 지정된 값만 생성 한다. model, dao, mappers
 			String only = tables.getOnly();
@@ -208,6 +209,9 @@ public class MakeTable extends BaseMake {
 		data.put("findAll", Sql.findAll(tables, table, columns, pkColumns));
 		data.put("findBy", Sql.findBy(tables, table, columns, pkColumns));
 		data.put("insert", Sql.insert(tables, table, columns, pkColumns));
+		data.put("update", Sql.update(tables, table, columns, pkColumns));
+		data.put("delete", Sql.delete(tables, table, columns, pkColumns));
+		data.put("deleteAll", Sql.deleteAll(tables, table, columns, pkColumns));
 		
 		String folder = UtilsText.concat(new File(Global.getBasePath().getSource()).getAbsolutePath(), File.separator, defaultPackage.replace(".", "/"));
 		String path = UtilsText.concat(folder, File.separator, fileName, "Dao.java");

@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import code.generator.common.Global;
+import code.generator.jdbc.DBInfo;
 import code.generator.util.UtilsText;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,6 +19,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TablesElement {
+	
+	private DBInfo dBInfo;
 	
     @XmlAttribute
     private String business;
@@ -83,6 +86,15 @@ public class TablesElement {
 	public List<TableElement> getTable() {
 		return table;
 	}
+
+	public DBInfo getDBInfo() {
+		return dBInfo;
+	}
+
+	public void setDBInfo(DBInfo dBInfo) {
+		this.dBInfo = dBInfo;
+	}
+
     
     
     
