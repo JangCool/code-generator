@@ -89,7 +89,7 @@ public interface Base${fileName}Dao {
      * 이 deleteAll 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${deleteAll} 
-	int deleteAll(${fileName} ${field}) throws Exception;
+	int deleteAll() throws Exception;
 	
 
 }
