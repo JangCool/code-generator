@@ -210,7 +210,7 @@ public class MakeTable extends BaseMake {
 		data.put("find", Sql.findBy(tables, table, columns, pkColumns));
 		data.put("insert", Sql.insert(tables, table, columns, pkColumns));
 		data.put("updateByPrimaryKey", Sql.updateByPrimaryKey(tables, table, columns, pkColumns));
-		data.put("update", Sql.updateBy(tables, table, columns));
+		data.put("update", Sql.update(tables, table, columns, pkColumns));
 		data.put("deleteByPrimaryKey", Sql.deleteByPrimaryKey(tables, table, columns, pkColumns));
 		data.put("delete", Sql.delete(tables, table, columns));
 		data.put("deleteAll", Sql.deleteAll(tables, table, columns, pkColumns));
@@ -327,7 +327,7 @@ public class MakeTable extends BaseMake {
 		data.put("find", Sql.findBy(tables, table, columns, pkColumns, false));
 		data.put("insert", Sql.insert(tables, table, columns, pkColumns, false));
 		data.put("updateByPrimaryKey", Sql.updateByPrimaryKey(tables, table, columns, pkColumns, false));
-		data.put("update", Sql.updateBy(tables, table, columns, false));
+		data.put("update", Sql.update(tables, table, columns, pkColumns, false));
 		data.put("deleteByPrimaryKey", Sql.deleteByPrimaryKey(tables, table, columns, pkColumns, false));
 		data.put("delete", Sql.delete(tables, table, columns, false));
 		

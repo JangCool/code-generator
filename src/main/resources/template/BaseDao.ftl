@@ -70,13 +70,13 @@ public interface Base${fileName}Dao {
 	 /**
      * 이 deleteByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
-    ${delete} 
+    ${deleteByPrimaryKey} 
 	int deleteByPrimaryKey(<#if pkColumns??><#list pkColumns as column><#if column_index gt 0 > ,</#if>@Param("${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}") ${TableOperation.javaType('${column.DATA_TYPE}')} ${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}</#list></#if>) throws Exception;
 
 	/**
      * 이 deleteByObjectPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
-    ${delete} 
+    ${deleteByPrimaryKey} 
 	int deleteByObjectPrimaryKey(${fileName} ${field}) throws Exception;
 	
 	/**

@@ -30,9 +30,9 @@ public class Sql {
 			case "binary"				: java = "byte[]";						break;
 			case "bit"	 				: java = "java.lang.Boolean";			break;
 			case "char"	 				: java = "String";						break;
-			case "date"					: java = "java.sql.Timestamp";			break;
-			case "datetime"				: java = "java.sql.Timestamp";			break;
-			case "datetime2"			: java = "java.sql.Timestamp";			break;
+			case "date"					: java = "java.time.LocalDate";			break;
+			case "datetime"				: java = "java.time.LocalDateTime";		break;
+			case "datetime2"			: java = "java.time.LocalDateTime";		break;
 			case "decimal"				: java = "java.math.BigDecimal";		break;
 			case "float"				: java = "java.lang.Double";			break;
 			case "image"				: java = "byte[]";						break;
@@ -52,8 +52,8 @@ public class Sql {
 			case "text"					: java = "String";						break;
 			case "mediumtext"			: java = "String";						break;
 			case "longtext"				: java = "String";						break;
-			case "time"					: java = "java.sql.Time";				break;
-			case "timestamp"			: java = "byte[]";						break;
+			case "time"					: java = "java.time.LocalTime";			break;
+			case "timestamp"			: java = "java.time.LocalDateTime";		break;
 			case "tinyint"				: java = "java.lang.Short";				break;
 			case "udt"					: java = "byte[]";						break;
 			case "uniqueidentifier"		: java = "String";						break;
@@ -632,9 +632,9 @@ public class Sql {
 		}
 		
 		mapperSql += "UPDATE " + table.getName() +" SET ";
-		mapperSql += updateColumns(tables, table, columnsRs) +") ";
+		mapperSql += updateColumns(tables, table, columnsRs, pkColumnsRs);
 		mapperSql += "WHERE ";
-		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs)+") ";
+		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs);
 	
 		if(isAnnotation) {
 			mapperSql += "</script> ";
@@ -643,11 +643,11 @@ public class Sql {
 		return mapperSql;
 	}
 
-	public static String updateBy(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs) throws Exception {
-		return updateByPrimaryKey(tables, table, columnsRs, columnsRs, true);
+	public static String update(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs) throws Exception {
+		return update(tables, table, columnsRs, pkColumnsRs, true);
 	}
 	
-	public static String updateBy(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, boolean isAnnotation) throws Exception {
+	public static String update(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs, boolean isAnnotation) throws Exception {
 		
 		String mapperSql = "";
 		
@@ -657,9 +657,9 @@ public class Sql {
 		}
 		
 		mapperSql += "UPDATE " + table.getName() +" SET ";
-		mapperSql += updateColumns(tables, table, columnsRs) +") ";
+		mapperSql += updateColumns(tables, table, columnsRs, pkColumnsRs);
 		mapperSql += "WHERE ";
-		mapperSql += bindColumn(tables, table, columnsRs)+") ";
+		mapperSql += bindColumn(tables, table, columnsRs);
 	
 		if(isAnnotation) {
 			mapperSql += "</script> ";
@@ -668,7 +668,7 @@ public class Sql {
 		return mapperSql;
 	}
 
-	private static String updateColumns(TablesElement tables, TableElement table, List<Map<String, String>> columns) {
+	private static String updateColumns(TablesElement tables, TableElement table, List<Map<String, String>> columns, List<Map<String, String>> pkColumns) {
 
 		String bindColumn = "";
 		
@@ -694,9 +694,28 @@ public class Sql {
 				continue;
 			}
 			
+			boolean isPk = false;
+			if (pkColumns != null && pkColumns.size() > 0) {
+
+				for (Map<String, String> pkColumn : pkColumns) {
+
+					String orgPkColumnName = pkColumn.get(Const.COLUMN_NAME).toUpperCase();
+
+					if (orgColumnName.equals(orgPkColumnName)) {
+						isPk = true;
+						break;
+					}
+				}
+			}
+			
+			//pk일 경우 업데이트 컬럼에 넣지 않는다.
+			if(isPk) {
+				continue;
+			}
+			
 			bindColumn += "<if test=\'"+val+" != null\'>";
 			
-			if (i > 0) {
+			if (i > pkColumns.size()) {
 				bindColumn += ", ";
 			}
 			
@@ -725,7 +744,7 @@ public class Sql {
 
 			if (isTypeString) {
 				bindColumn += "<choose> ";
-				bindColumn += "<when test=\'" + val + " == null  or " + columnName +" == \\\"\\\"'> ";
+				bindColumn += "<when test=\'" + val + " == null  or " + val +" == \\\"\\\"'> ";
 				bindColumn += "null ";
 				bindColumn += "</when> ";
 				bindColumn += "<otherwise> ";
@@ -747,9 +766,9 @@ public class Sql {
 					}
 				}
 				if (isDefaultDate) {
-					bindColumn +=  UtilsText.concat("<choose><when test='", val, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
+					bindColumn +=  UtilsText.concat("<choose><when test='", val, " != null'>#{", val,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
 				} else {
-					bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
+					bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>#{", val,", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
 				}
 				
 			} else {
@@ -773,6 +792,8 @@ public class Sql {
 		
 		if(isAnnotation) {
 			mapperSql += "@Delete(\"";
+			mapperSql += "<script> ";
+
 		}
 		
 		mapperSql += "DELETE FROM " + table.getName() +" ";
@@ -798,6 +819,7 @@ public class Sql {
 		
 		if(isAnnotation) {
 			mapperSql += "@Delete(\"";
+			mapperSql += "<script> ";
 		}
 		
 		mapperSql += "DELETE FROM " + table.getName() +" ";

@@ -2,7 +2,9 @@ package ${package};
 
 import ${package}.base.Base${fileName};
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -16,7 +18,9 @@ import lombok.extern.slf4j.Slf4j;
  *   - 로직 처리시 필요한 구분 값 또는 결과 값을 저장할 필요가 있을 경우.
  */
 @Slf4j
-@Data
+@Getter
+@Setter
+@ToString(callSuper = true)
 public class ${fileName} extends Base${fileName} {
 
 

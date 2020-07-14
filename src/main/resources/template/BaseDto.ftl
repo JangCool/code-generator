@@ -1,6 +1,8 @@
 package ${package}.base;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import java.io.Serializable;
 import kr.co.pionnet.butterfly.core.core.bean.BaseBean;
 
@@ -8,7 +10,9 @@ import kr.co.pionnet.butterfly.core.core.bean.BaseBean;
  * 테이블 명  : ${name}
  * 설명        : ${desc}
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class Base${fileName} extends BaseBean implements Serializable {
 
 <#if model??>
