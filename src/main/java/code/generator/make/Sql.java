@@ -618,11 +618,11 @@ public class Sql {
 		return mapperSql;
 	}
 	
-	public static String update(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs) throws Exception {
-		return update(tables, table, columnsRs, pkColumnsRs, true);
+	public static String updateByPrimaryKey(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs) throws Exception {
+		return updateByPrimaryKey(tables, table, columnsRs, pkColumnsRs, true);
 	}
 	
-	public static String update(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs, boolean isAnnotation) throws Exception {
+	public static String updateByPrimaryKey(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs, boolean isAnnotation) throws Exception {
 		
 		String mapperSql = "";
 		
@@ -635,6 +635,31 @@ public class Sql {
 		mapperSql += updateColumns(tables, table, columnsRs) +") ";
 		mapperSql += "WHERE ";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs)+") ";
+	
+		if(isAnnotation) {
+			mapperSql += "</script> ";
+			mapperSql += "\")";
+		}
+		return mapperSql;
+	}
+
+	public static String updateBy(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs) throws Exception {
+		return updateByPrimaryKey(tables, table, columnsRs, columnsRs, true);
+	}
+	
+	public static String updateBy(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, boolean isAnnotation) throws Exception {
+		
+		String mapperSql = "";
+		
+		if(isAnnotation) {
+			mapperSql += "@Update(\"";
+			mapperSql += "<script> ";
+		}
+		
+		mapperSql += "UPDATE " + table.getName() +" SET ";
+		mapperSql += updateColumns(tables, table, columnsRs) +") ";
+		mapperSql += "WHERE ";
+		mapperSql += bindColumn(tables, table, columnsRs)+") ";
 	
 		if(isAnnotation) {
 			mapperSql += "</script> ";

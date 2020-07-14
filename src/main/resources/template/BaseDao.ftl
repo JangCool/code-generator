@@ -31,10 +31,10 @@ public interface Base${fileName}Dao {
 	${fileName} findByPrimaryKey(<#if pkColumns??><#list pkColumns as column><#if column_index gt 0 > ,</#if>@Param("${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}") ${TableOperation.javaType('${column.DATA_TYPE}')} ${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}</#list></#if>) throws Exception;
 
     /**
-     * 이 findByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 findByObjectPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${findByPrimaryKey}
-	${fileName} findByPrimaryKey(${fileName} ${field}) throws Exception;
+	${fileName} findByObjectPrimaryKey(${fileName} ${field}) throws Exception;
 
     /**
      * 이 findAll 메소드는 Code Generator를 통하여 생성 되었습니다.
@@ -56,10 +56,16 @@ public interface Base${fileName}Dao {
 	int insert(${fileName} ${field}) throws Exception;
 	
     /**
-     * 이 update 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 updateByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
-    ${update}
-	int update(${fileName} ${field}) throws Exception;
+    ${updateByPrimaryKey}
+	int updateByPrimaryKey(${fileName} ${field}) throws Exception;
+	
+    /**
+     * 이 updateByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
+     */
+    ${updateBy}
+	int updateBy(${fileName} ${field}) throws Exception;
 	
 	 /**
      * 이 deleteByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
@@ -68,10 +74,10 @@ public interface Base${fileName}Dao {
 	int deleteByPrimaryKey(<#if pkColumns??><#list pkColumns as column><#if column_index gt 0 > ,</#if>@Param("${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}") ${TableOperation.javaType('${column.DATA_TYPE}')} ${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}</#list></#if>) throws Exception;
 
 	/**
-     * 이 deleteByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 deleteByObjectPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${delete} 
-	int deleteByPrimaryKey(${fileName} ${field}) throws Exception;
+	int deleteByObjectPrimaryKey(${fileName} ${field}) throws Exception;
 	
 	/**
      * 이 deleteAll 메소드는 Code Generator를 통하여 생성 되었습니다.

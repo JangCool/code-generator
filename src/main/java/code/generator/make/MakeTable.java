@@ -209,7 +209,8 @@ public class MakeTable extends BaseMake {
 		data.put("findAll", Sql.findAll(tables, table, columns, pkColumns));
 		data.put("findBy", Sql.findBy(tables, table, columns, pkColumns));
 		data.put("insert", Sql.insert(tables, table, columns, pkColumns));
-		data.put("update", Sql.update(tables, table, columns, pkColumns));
+		data.put("updateByPrimaryKey", Sql.updateByPrimaryKey(tables, table, columns, pkColumns));
+		data.put("updateBy", Sql.updateBy(tables, table, columns));
 		data.put("delete", Sql.delete(tables, table, columns, pkColumns));
 		data.put("deleteAll", Sql.deleteAll(tables, table, columns, pkColumns));
 		
@@ -324,7 +325,8 @@ public class MakeTable extends BaseMake {
 		data.put("pkcolumns", Sql.bindColumnPrimaryKey(tables, table, pkColumns));
 		data.put("findBy", Sql.findBy(tables, table, columns, pkColumns, false));
 		data.put("insert", Sql.insert(tables, table, columns, pkColumns, false));
-		data.put("update", Sql.update(tables, table, columns, pkColumns, false));
+		data.put("updateByPrimaryKey", Sql.updateByPrimaryKey(tables, table, columns, pkColumns, false));
+		data.put("updateBy", Sql.updateBy(tables, table, columns, false));
 		data.put("delete", Sql.delete(tables, table, columns, pkColumns, false));
 		
 		String folder = UtilsText.concat(new File(Global.getBasePath().getResources()).getAbsolutePath(), File.separator, tables.getSubPathMappers());
