@@ -763,11 +763,11 @@ public class Sql {
 		return bindColumn;
 	}
 
-	public static String delete(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs) throws Exception {
-		return delete(tables, table, columnsRs, pkColumnsRs, true);
+	public static String deleteByPrimaryKey(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs) throws Exception {
+		return deleteByPrimaryKey(tables, table, columnsRs, pkColumnsRs, true);
 	}
 	
-	public static String delete(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs, boolean isAnnotation) throws Exception {
+	public static String deleteByPrimaryKey(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs, boolean isAnnotation) throws Exception {
 		
 		String mapperSql = "";
 		
@@ -778,6 +778,31 @@ public class Sql {
 		mapperSql += "DELETE FROM " + table.getName() +" ";
 		mapperSql += "WHERE ";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs);
+		
+		if(isAnnotation) {
+			mapperSql += "</script> ";
+			mapperSql += "\")";
+		}
+		
+		return mapperSql;
+	}
+	
+
+	public static String delete(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs) throws Exception {
+		return delete(tables, table, columnsRs, true);
+	}
+	
+	public static String delete(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, boolean isAnnotation) throws Exception {
+		
+		String mapperSql = "";
+		
+		if(isAnnotation) {
+			mapperSql += "@Delete(\"";
+		}
+		
+		mapperSql += "DELETE FROM " + table.getName() +" ";
+		mapperSql += "WHERE ";
+		mapperSql += bindColumn(tables, table, columnsRs);
 		
 		if(isAnnotation) {
 			mapperSql += "</script> ";

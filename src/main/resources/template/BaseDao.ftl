@@ -46,8 +46,8 @@ public interface Base${fileName}Dao {
     /**
      * 이 findBy 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
-     ${findBy}
-	List<${fileName}> findBy(${fileName} ${field}) throws Exception;
+     ${find}
+	List<${fileName}> find(${fileName} ${field}) throws Exception;
 		
     /**
      * 이 select 메소드는 Code Generator를 통하여 생성 되었습니다.
@@ -56,16 +56,16 @@ public interface Base${fileName}Dao {
 	int insert(${fileName} ${field}) throws Exception;
 	
     /**
-     * 이 updateByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 updateByObjectPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${updateByPrimaryKey}
-	int updateByPrimaryKey(${fileName} ${field}) throws Exception;
+	int updateByObjectPrimaryKey(${fileName} ${field}) throws Exception;
 	
     /**
      * 이 updateByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
-    ${updateBy}
-	int updateBy(${fileName} ${field}) throws Exception;
+    ${update}
+	int update(${fileName} ${field}) throws Exception;
 	
 	 /**
      * 이 deleteByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
@@ -78,6 +78,12 @@ public interface Base${fileName}Dao {
      */
     ${delete} 
 	int deleteByObjectPrimaryKey(${fileName} ${field}) throws Exception;
+	
+	/**
+     * 이 delete 메소드는 Code Generator를 통하여 생성 되었습니다.
+     */
+    ${delete} 
+	int delete(${fileName} ${field}) throws Exception;
 	
 	/**
      * 이 deleteAll 메소드는 Code Generator를 통하여 생성 되었습니다.
