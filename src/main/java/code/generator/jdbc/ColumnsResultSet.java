@@ -189,9 +189,6 @@ public class ColumnsResultSet {
 			
 			if(constRs.next()) {		
 			
-				Log.debug(SQL_H2DB_TABLE_CONSTRAINTS);
-				Log.debug(tableName);
-				
 				String columnList = constRs.getString("COLUMN_LIST");
 				
 				if(!UtilsText.isBlank(columnList)) {
@@ -220,7 +217,6 @@ public class ColumnsResultSet {
 	
 						query.append(") ORDER BY ordinal_position");
 						
-						Log.debug(query.toString());
 						pkPstmt = connection.getConnection().prepareStatement(query.toString());
 						
 						int c = 1;
@@ -299,7 +295,7 @@ public class ColumnsResultSet {
 
 		while (rs.next()) {
 			Map<String, String> column = new HashMap<>();
-			Log.debug("PK column name : "
+			Log.debug("PK column : "
 					+ rs.getString("COLUMN_NAME").concat(", type : ").concat(rs.getString("DATA_TYPE")));
 
 			column.put(Const.COLUMN_NAME, rs.getString(Const.COLUMN_NAME));
