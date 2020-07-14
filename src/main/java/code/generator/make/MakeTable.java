@@ -151,9 +151,8 @@ public class MakeTable extends BaseMake {
 
 					createRepository(tables, table);
 					createModel(tables, table);
-//					// rename, prefix 는 쿼리 내용도 적용될 필요가 없다. 가공되지 않은 원본 테에블명 넘긴다.
-//					createMapper(gv, orgTableName, element.getAttribute("name"), fileName,
-//							element.getElementsByTagName("column"));
+					// rename, prefix 는 쿼리 내용도 적용될 필요가 없다. 가공되지 않은 원본 테에블명 넘긴다.
+					createMappers(tables, table);
 
 				} else {
 //					if ("model".equals(only)) {
@@ -178,7 +177,8 @@ public class MakeTable extends BaseMake {
 	/**
 	 * dao 파일을 생성 한다.
 	 * 
-	 * @param gv           생성에 필요한 정보를 담고 있는 GeneratorVO 객체
+	 * @param tables          tables element 정보를 담고 있는 객체
+	 * @param table           table element 정보를 담고 있는 객체
 	 * @throws Exception
 	 */
 	private void createRepository(TablesElement tables, TableElement table) throws Exception {
@@ -231,9 +231,8 @@ public class MakeTable extends BaseMake {
 	/**
 	 * model 파일을 생성 한다.
 	 * 
-	 * @param gv           생성에 필요한 정보를 담고 있는 GeneratorVO 객체
-	 * @param orgTableName db에 존재하는 테이블명
-	 * @param tableName    camelcase로 변형된 테이블 명.
+	 * @param tables          tables element 정보를 담고 있는 객체
+	 * @param table           table element 정보를 담고 있는 객체
 	 * @throws Exception
 	 */
 	private void createModel(TablesElement tables, TableElement table) throws Exception {
@@ -246,7 +245,6 @@ public class MakeTable extends BaseMake {
 		
 		String modelPackage = replaceModelPackage(defaultPackage);
 		
-		System.out.println(modelPackage);
 
 		Map<String, Object> data = new HashMap<>();
 		data.put("fileName", fileName);
@@ -294,57 +292,58 @@ public class MakeTable extends BaseMake {
 		
 		return fieldList;
 	}
-//
-//	/**
-//	 * mapper 파일을 생성 한다.
-//	 * 
-//	 * @param gv           생성에 필요한 정보를 담고 있는 GeneratorVO 객체
-//	 * @param orgTableName db에 존재하는 테이블명
-//	 * @param tableName    camelcase로 변형된 테이블 명.
-//	 * @throws Exception
-//	 */
-//	public void createMapper(RepositoryVO repositoryVO, String orgTableName, String rename, String fileName,
-//			NodeList columnNodeList) throws Exception {
-//
-//		List<Map<String, String>> columns = processSql.getColumns();
-//		List<Map<String, String>> pkColumns = processSql.getPrimaryColumns();
-//
-//		Map<String, String> data = new HashMap<>();
-//		data.put("fileName", fileName);
-//		data.put("package", repositoryVO.getPkg());
-//		data.put("columns", PreparedSql.columns(orgTableName, repositoryVO, columns, pkColumns, columnNodeList));
-//		data.put("pkcolumns", PreparedSql.pkColumns(orgTableName, repositoryVO, columns, pkColumns, columnNodeList));
-//		data.put("selectByPrimaryKey",
-//				PreparedSql.selectByPrimaryKey(orgTableName, repositoryVO, columns, pkColumns, columnNodeList));
-//		data.put("select", PreparedSql.select(orgTableName, repositoryVO, columns, pkColumns, columnNodeList,
-//				repositoryVO.getLock()));
-//		data.put("insert", PreparedSql.insert(orgTableName, repositoryVO, columns, pkColumns, columnNodeList));
-//		data.put("insertKeyGenerator", PreparedSql.getAutoIncrement(columns));
-//		data.put("update", PreparedSql.update(orgTableName, repositoryVO, columns, pkColumns, columnNodeList));
-//		data.put("delete", PreparedSql.delete(orgTableName, repositoryVO, columns, pkColumns, columnNodeList));
-//		data.put("model", UtilsText.concat(replaceModelPackage(repositoryVO.getPkg()), ".", fileName));
-//		data.put("mapperid", UtilsText.concat(repositoryVO.getPkg(), ".", fileName, "Dao"));
-//		data.put("date", UtilsDate.today(UtilsDate.DEFAULT_DATETIME_PATTERN));
-//		data.put("tableName", orgTableName);
-//		data.put("desc", repositoryVO.getDesc());
-//		data.put("resultMap", PreparedSql.resultMap(orgTableName, repositoryVO, columns, pkColumns, columnNodeList));
-//
-//		String folder = UtilsText.concat(getPathMappers().getAbsolutePath(), File.separator,
-//				repositoryVO.getMapperPkg().replace(".", "/"));
-//		String path = UtilsText.concat(folder, File.separator, File.separator, fileName, "Mapper.xml");
-//
-//		String baseFolder = UtilsText.concat(folder, File.separator, "base");
-//		String basePath = UtilsText.concat(baseFolder, File.separator, "Base", fileName, "Mapper.xml");
-//
-//		if (repositoryVO.isBaseMapper()) {
-//			writeTemplate("BaseMapper", baseFolder, basePath, data);
-//			writeTemplate("Mapper", folder, path, data);
-//		} else {
-//			writeTemplate("MapperNotExtend", folder, path, data);
-//		}
-//	}
-//
-//
+
+
+	/**
+	 * mapper.xml 파일을 생성 한다.
+	 * 
+	 * @param tables          tables element 정보를 담고 있는 객체
+	 * @param table           table element 정보를 담고 있는 객체
+	 * @throws Exception
+	 */
+	private void createMappers(TablesElement tables, TableElement table) throws Exception {
+
+		List<Map<String, String>> columns = columnsResultSet.getColumns();
+		List<Map<String, String>> pkColumns = columnsResultSet.getPrimaryColumns();
+
+
+		String fileName = table.getFileName();
+		String defaultPackage = tables.getDefaultPackage();
+		
+		String modelPackage = replaceModelPackage(defaultPackage);
+		
+		
+		Map<String, Object> data = new HashMap<>();
+		data.put("fileName", fileName);
+		data.put("package", defaultPackage);
+		data.put("name", table.getName());
+		data.put("desc", table.getDesc());
+		data.put("mapperid", UtilsText.concat(defaultPackage, ".", fileName, "Dao"));
+		data.put("model", UtilsText.concat(modelPackage, ".", fileName));
+		data.put("date", UtilsDate.today(UtilsDate.DEFAULT_DATETIME_PATTERN));
+		data.put("resultMap", Sql.resultMap(tables, table, columns, pkColumns));
+		data.put("columns", Sql.selectColumns(tables, table, columns));
+		data.put("pkcolumns", Sql.bindColumnPrimaryKey(tables, table, pkColumns));
+		data.put("findBy", Sql.findBy(tables, table, columns, pkColumns, false));
+		data.put("insert", Sql.insert(tables, table, columns, pkColumns, false));
+		data.put("update", Sql.update(tables, table, columns, pkColumns, false));
+		data.put("delete", Sql.delete(tables, table, columns, pkColumns, false));
+		
+		String folder = UtilsText.concat(new File(Global.getBasePath().getResources()).getAbsolutePath(), File.separator, tables.getMappersPath());
+		String path = UtilsText.concat(folder, File.separator, File.separator, fileName, "Mapper.xml");
+
+		String baseFolder = UtilsText.concat(folder, File.separator, "base");
+		String basePath = UtilsText.concat(baseFolder, File.separator, "Base", fileName, "Mapper.xml");
+
+		if (tables.isBaseMappers()) {
+			writeTemplate("BaseMapper", baseFolder, basePath, data);
+			writeTemplate("Mapper", folder, path, data);
+		} else {
+			writeTemplate("MapperNotExtend", folder, path, data);
+		}
+	}
+
+
 	/**
 	 * Dao를 만든 직후 Dto도 만들기 위해 패키지명 .dto로 변경 한다.
 	 * 

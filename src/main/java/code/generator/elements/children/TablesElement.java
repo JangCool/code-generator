@@ -1,5 +1,6 @@
 package code.generator.elements.children;
 
+import java.io.File;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -56,6 +57,10 @@ public class TablesElement {
 
 	public String getDefaultPackage() {
 		return UtilsText.isBlank(this.defaultPackage) ? Global.getBasePackage().getRepository() : this.defaultPackage;
+	}
+	
+	public String getMappersPath() {
+		return "mappers"+File.separator +getBusiness() + File.separator + getSqlSession();
 	}
 
 	public String getSuffixPackage() {

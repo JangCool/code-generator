@@ -3,7 +3,7 @@
 <mapper namespace="${mapperid}">
 
     <!--
-		※ 테이블 명  : ${tableName}
+		※ 테이블 명  : ${name}
 		※설명         : ${desc}
 		
     	※ 경고

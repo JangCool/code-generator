@@ -28,7 +28,7 @@
 <!-- 		/> -->
 <!-- 	</global> -->
 	
-	<tables business="sample" suffix-package="repository">
+	<tables business="sample" suffix-package="repository" base-mappers="false">
 		<table name="TEST"  desc="테스트" />
 	</tables>
 <!-- 	<tables business="sample" suffix-package="repository"> -->

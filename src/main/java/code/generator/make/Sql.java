@@ -301,7 +301,7 @@ public class Sql {
 	}
 
 	
-	private static String bindColumnPrimaryKey(TablesElement tables, TableElement table, List<Map<String, String>> pkColumnsRs) throws Exception{
+	public static String bindColumnPrimaryKey(TablesElement tables, TableElement table, List<Map<String, String>> pkColumnsRs) throws Exception{
 
 		if(pkColumnsRs == null || (pkColumnsRs != null && pkColumnsRs.size()  == 0)) {
 			throw new NotFoundPrimaryKey("Primary Key 정보가 존재하지 않습니다. 필수로 지정하여 주세요.");
@@ -309,7 +309,7 @@ public class Sql {
 		return bindColumn(tables, table, pkColumnsRs, true);
 	}
 	
-	private static String bindColumn(TablesElement tables, TableElement table, List<Map<String, String>> columns, boolean isPrimaryKey) throws Exception{
+	public static String bindColumn(TablesElement tables, TableElement table, List<Map<String, String>> columns, boolean isPrimaryKey) throws Exception{
 
 		String bindColumn = "";
 		
@@ -402,19 +402,29 @@ public class Sql {
 	}
 	
 	public static String findBy(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs) throws Exception {
+		return findBy(tables, table, columnsRs, pkColumnsRs, true);
+	}
+	public static String findBy(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs, boolean isAnnotation) throws Exception {
 		
 		String mapperSql = "";
 		
-		mapperSql += "@Select(\"";
-		mapperSql += "<script> ";
+		if(isAnnotation) {
+			mapperSql += "@Select(\"";
+			mapperSql += "<script> ";			
+		}
+
 		mapperSql += "SELECT ";
 		mapperSql += selectColumns(tables, table, columnsRs) +" ";
 		mapperSql += "FROM ";
 		mapperSql += getTableName(table);
 		mapperSql += "WHERE ";
 		mapperSql += bindColumn(tables, table, columnsRs);
-		mapperSql += "</script> ";
-		mapperSql += "\")";
+		
+		if(isAnnotation) {
+			mapperSql += "</script> ";
+			mapperSql += "\")";
+		}
+		
 		return mapperSql;
 	}
 	
@@ -583,82 +593,57 @@ public class Sql {
 	}
 	
 	public static String insert(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs) throws Exception {
+		return insert(tables, table, columnsRs, pkColumnsRs, true);
+	}
+		
+	public static String insert(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs, boolean isAnnotation) throws Exception {
 		
 		String mapperSql = "";
 		
-		mapperSql += "@Insert(\"";
-		mapperSql += "<script> ";
+		if(isAnnotation) {
+			mapperSql += "@Insert(\"";
+			mapperSql += "<script> ";	
+		}
+		
 		mapperSql += "INSERT INTO " + table.getName() +" (";
 		mapperSql += insertColumns(tables, table, columnsRs) +") ";
 		mapperSql += "VALUES (";
 		mapperSql += bindColumnOfInsert(tables, table, columnsRs)+") ";
-		mapperSql += "</script> ";
-		mapperSql += "\")";
+
+		if(isAnnotation) {
+			mapperSql += "</script> ";
+			mapperSql += "\")";
+		}
 		
 		return mapperSql;
 	}
 	
 	public static String update(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs) throws Exception {
+		return update(tables, table, columnsRs, pkColumnsRs, true);
+	}
+	
+	public static String update(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs, boolean isAnnotation) throws Exception {
 		
 		String mapperSql = "";
 		
-		mapperSql += "@Update(\"";
-		mapperSql += "<script> ";
+		if(isAnnotation) {
+			mapperSql += "@Update(\"";
+			mapperSql += "<script> ";
+		}
+		
 		mapperSql += "UPDATE " + table.getName() +" SET ";
 		mapperSql += updateColumns(tables, table, columnsRs) +") ";
 		mapperSql += "WHERE ";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs)+") ";
-		mapperSql += "</script> ";
-		mapperSql += "\")";
-		
+	
+		if(isAnnotation) {
+			mapperSql += "</script> ";
+			mapperSql += "\")";
+		}
 		return mapperSql;
 	}
 
 	private static String updateColumns(TablesElement tables, TableElement table, List<Map<String, String>> columns) {
-//		if (!"VARCHAR".equals(jdbcType(dataType)) && !"VARCHAR2".equals(jdbcType(dataType))) {
-//
-//			if ("date".equals(dataType) || "datetime".equals(dataType) || "datetime2".equals(dataType)) {
-//
-//				String[] defaultDateColumns = repositoryVO.getModDateColumn().toUpperCase().split("\\,");
-//
-//				boolean isDefaultDate = false;
-//				for (int j = 0; j < defaultDateColumns.length; j++) {
-//					if (orgColumnName.equals(defaultDateColumns[j].toUpperCase())) {
-//						isDefaultDate = true;
-//						break;
-//					}
-//				}
-//				if (isDefaultDate) {
-//					sb.append("\t\t\t").append(UtilsText.concat(orgColumnName, "=",
-//							getDateTime(repositoryVO.getdBInfo()), ", \n"));
-//				} else {
-//					sb.append("\t\t\t").append(UtilsText.concat("<if test=\"", columnName, " != null\"> \n"));
-//					sb.append("\t\t\t\t").append(orgColumnName).append(" = ").append(
-//							UtilsText.concat("#{", columnName, ", jdbcType=", jdbcType(dataType), "}, \n"));
-//					sb.append("\t\t\t").append(UtilsText.concat("</if> \n"));
-//				}
-//			} else {
-//				sb.append("\t\t\t").append(UtilsText.concat("<if test=\"", columnName, " != null\"> \n"));
-//				sb.append("\t\t\t\t").append(orgColumnName).append(" = ")
-//						.append(UtilsText.concat("#{", columnName, ", jdbcType=", jdbcType(dataType), "}, \n"));
-//				sb.append("\t\t\t").append(UtilsText.concat("</if> \n"));
-//			}
-//
-//		} else {
-//
-//			sb.append("\t\t\t").append(UtilsText.concat("<if test=\"", columnName, " != null\"> \n"));
-//			sb.append("\t\t\t\t").append(UtilsText.concat("<choose> \n"));
-//			sb.append("\t\t\t\t\t").append(UtilsText.concat("<when test=\"", columnName, " == ''\"> \n"));
-//			sb.append("\t\t\t\t\t\t").append(orgColumnName).append(" = null, \n");
-//			sb.append("\t\t\t\t\t").append(UtilsText.concat("</when> \n"));
-//			sb.append("\t\t\t\t\t").append(UtilsText.concat("<otherwise> \n"));
-//			sb.append("\t\t\t\t\t\t").append(orgColumnName).append(" = ")
-//					.append(UtilsText.concat("#{", columnName, ", jdbcType=", jdbcType(dataType), "}, \n"));
-//			sb.append("\t\t\t\t\t").append(UtilsText.concat("</otherwise> \n"));
-//			sb.append("\t\t\t\t").append(UtilsText.concat("</choose> \n"));
-//			sb.append("\t\t\t").append(UtilsText.concat("</if> \n"));
-//		}
-		
 
 		String bindColumn = "";
 		
@@ -754,14 +739,25 @@ public class Sql {
 	}
 
 	public static String delete(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs) throws Exception {
+		return delete(tables, table, columnsRs, pkColumnsRs, true);
+	}
+	
+	public static String delete(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs, boolean isAnnotation) throws Exception {
 		
 		String mapperSql = "";
 		
-		mapperSql += "@Delete(\"";
+		if(isAnnotation) {
+			mapperSql += "@Delete(\"";
+		}
+		
 		mapperSql += "DELETE FROM " + table.getName() +" ";
 		mapperSql += "WHERE ";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs);
-		mapperSql += "\")";
+		
+		if(isAnnotation) {
+			mapperSql += "</script> ";
+			mapperSql += "\")";
+		}
 		
 		return mapperSql;
 	}
@@ -776,4 +772,54 @@ public class Sql {
 		
 		return mapperSql;
 	}
+	
+	
+	public static String resultMap(TablesElement tables, TableElement table, List<Map<String, String>> columns, List<Map<String, String>> pkColumns) throws Exception {
+
+		
+		String resultMap = "";
+		int columnSize = columns.size();
+		
+		for (int i = 0; i < columnSize; i++) {
+			
+			Map<String, String> column = columns.get(i);
+			String orgColumnName = column.get(Const.COLUMN_NAME);
+			String columnName = orgColumnName;
+			String dataType = column.get(Const.DATA_TYPE).toUpperCase();
+		
+			boolean isPk = false;
+			if (pkColumns != null && pkColumns.size() > 0) {
+
+				for (Map<String, String> pkColumn : pkColumns) {
+
+					String orgPkColumnName = pkColumn.get(Const.COLUMN_NAME).toUpperCase();
+
+					if (orgColumnName.equals(orgPkColumnName)) {
+						isPk = true;
+						break;
+					}
+				}
+				
+				
+				if (i > 0) {
+					resultMap += "\t\t";
+				}
+
+				if (isPk) {
+					resultMap += UtilsText.concat("<id column=\"", orgColumnName, "\" jdbcType=\"", jdbcType(dataType),	"\" property=\"", columnName, "\"/>");
+
+				} else {
+					resultMap += UtilsText.concat("<result column=\"", orgColumnName, "\" jdbcType=\"", jdbcType(dataType),	"\" property=\"", columnName, "\"/>");
+
+				}
+				resultMap += "\n";
+			}
+			
+			
+		}
+		
+		return resultMap;
+
+	}
+
 }
