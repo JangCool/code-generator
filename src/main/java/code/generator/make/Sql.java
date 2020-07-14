@@ -557,7 +557,7 @@ public class Sql {
 			if (isTypeString) {
 			
 				bindColumn += "<choose> ";
-				bindColumn += "<when test=\'" + columnName + " == null  or " + columnName +" == \\\"\\\"'> ";
+				bindColumn += "<when test=\'" + val + " == null  or " + val +" == \\\"\\\"'> ";
 				bindColumn += "null ";
 				bindColumn += "</when> ";
 				bindColumn += "<otherwise> ";
@@ -577,9 +577,9 @@ public class Sql {
 						}
 					}
 					if (isDefaultDate) {
-						bindColumn +=  UtilsText.concat("<choose><when test='", columnName, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
+						bindColumn +=  UtilsText.concat("<choose><when test='", val, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
 					} else {
-						bindColumn += UtilsText.concat("<choose><when test='", columnName, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
+						bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
 					}
 			} else {
 				bindColumn += tempBindColumn;
@@ -725,7 +725,7 @@ public class Sql {
 
 			if (isTypeString) {
 				bindColumn += "<choose> ";
-				bindColumn += "<when test=\'" + columnName + " == null  or " + columnName +" == \\\"\\\"'> ";
+				bindColumn += "<when test=\'" + val + " == null  or " + columnName +" == \\\"\\\"'> ";
 				bindColumn += "null ";
 				bindColumn += "</when> ";
 				bindColumn += "<otherwise> ";
@@ -747,9 +747,9 @@ public class Sql {
 					}
 				}
 				if (isDefaultDate) {
-					bindColumn +=  UtilsText.concat("<choose><when test='", columnName, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
+					bindColumn +=  UtilsText.concat("<choose><when test='", val, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
 				} else {
-					bindColumn += UtilsText.concat("<choose><when test='", columnName, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
+					bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
 				}
 				
 			} else {
