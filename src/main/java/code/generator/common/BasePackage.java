@@ -34,7 +34,7 @@ public class BasePackage {
 
 	
 	public BasePackage(BasePackageElement basePackageElement) {
-		
+		Log.debug(basePackageElement);
 		if(basePackageElement == null) {
 			return;
 		}

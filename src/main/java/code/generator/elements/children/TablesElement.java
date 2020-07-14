@@ -29,9 +29,6 @@ public class TablesElement {
     @XmlAttribute(name = "package")
     private String defaultPackage;
     
-    @XmlAttribute(name = "suffix-package")
-    private String suffixPackage;
-    
     @XmlAttribute(name = "sqlsession")
     private String sqlSession;
     
@@ -56,15 +53,45 @@ public class TablesElement {
 	}
 
 	public String getDefaultPackage() {
-		return UtilsText.isBlank(this.defaultPackage) ? Global.getBasePackage().getRepository() : this.defaultPackage;
+		return this.defaultPackage;
 	}
 	
-	public String getMappersPath() {
-		return "mappers"+File.separator +getBusiness() + File.separator + getSqlSession();
+	public String getRepositoryPackage() {
+		return (UtilsText.isBlank(this.defaultPackage) ? Global.getBasePackage().getRepository() : this.defaultPackage) +"."+ getSubPackage("repository");
 	}
+	
+	public String getModelPackage() {
+		return (UtilsText.isBlank(this.defaultPackage) ? Global.getBasePackage().getModel() : this.defaultPackage)+"."+ getSubPackage("model");
+	}
+	
+	public String getRepositoryPath() {
+		return getRepositoryPackage().replace(".", "/");
+	}
+	
+	public String getModelPath() {
+		return getModelPackage().replace(".", "/");
+	}
+	
+	public String getSubPathMappers() {
+		
+		String subPath = "mappers" + File.separator;
+		
+		subPath += getBusiness();
+		subPath += File.separator + getSqlSession();
+		
+		return subPath;
+		
+	}
+	
+	public String getSubPackage(String type) {
+		
+		String subPackage = "" ;
+		
+		subPackage += getBusiness();
+		subPackage += "."+ type;
+		subPackage += "." + getSqlSession();
 
-	public String getSuffixPackage() {
-		return suffixPackage;
+		return subPackage;
 	}
 
 	public String getSqlSession() {

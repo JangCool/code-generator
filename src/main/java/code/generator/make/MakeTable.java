@@ -121,10 +121,11 @@ public class MakeTable extends BaseMake {
 			
 			
 			Log.debug("================================================================================================");
-			Log.debug("sqlSession		 = " + tables.getSqlSession());
-			Log.debug("business   		 = " + tables.getBusiness());
-			Log.debug("package    		 = " + tables.getDefaultPackage());
-			Log.debug("suffix-package    = " + tables.getSuffixPackage());
+			Log.debug("sqlSession		 	= " + tables.getSqlSession());
+			Log.debug("business   		 	= " + tables.getBusiness());
+			Log.debug("package   			= " + (UtilsText.isBlank(tables.getDefaultPackage()) ? "" : tables.getDefaultPackage()));
+			Log.debug("repository package   = " + tables.getRepositoryPackage());
+			Log.debug("model package    	= " + tables.getModelPackage());
 			Log.debug("================================================================================================");
 			
 			
@@ -155,14 +156,13 @@ public class MakeTable extends BaseMake {
 					createMappers(tables, table);
 
 				} else {
-//					if ("model".equals(only)) {
-//						createModel(gv, orgTableName, rename, fileName);
-//					} else if ("dao".equals(only)) {
-//						createDao(gv, orgTableName, rename, fileName);
-//					} else if ("mapper".equals(only)) {
-//						createMapper(gv, orgTableName, rename, fileName,
-//								element.getElementsByTagName("column"));
-//					}
+					if ("model".equals(only)) {
+						createModel(tables, table);
+					} else if ("dao".equals(only)) {
+						createRepository(tables, table);
+					} else if ("mapper".equals(only)) {
+						createMappers(tables, table);
+					}
 				}
 				
 				
@@ -188,15 +188,15 @@ public class MakeTable extends BaseMake {
 
 		
 		String fileName = table.getFileName();
-		String defaultPackage = tables.getDefaultPackage();
+		String repositoryPackage = tables.getRepositoryPackage();
 		
 		String field = UtilsText.convertFirstLowerCase(fileName);
 
 		Map<String, Object> data = new HashMap<>();
 		data.put("fileName", fileName);
-		data.put("package", tables.getDefaultPackage());
-		data.put("model", UtilsText.concat(replaceModelPackage(defaultPackage), ".", fileName));
-		data.put("mapperid", UtilsText.concat(defaultPackage, ".", fileName));
+		data.put("package", repositoryPackage);
+		data.put("model", tables.getModelPackage()+ "."+ fileName);
+		data.put("mapperid", repositoryPackage+ "."+ fileName);
 		data.put("field", field);
 		data.put("date", UtilsDate.today(UtilsDate.DEFAULT_DATETIME_PATTERN));
 		data.put("sqlsession", UtilsText.capitalize(tables.getSqlSession()));
@@ -213,7 +213,7 @@ public class MakeTable extends BaseMake {
 		data.put("delete", Sql.delete(tables, table, columns, pkColumns));
 		data.put("deleteAll", Sql.deleteAll(tables, table, columns, pkColumns));
 		
-		String folder = UtilsText.concat(new File(Global.getBasePath().getSource()).getAbsolutePath(), File.separator, defaultPackage.replace(".", "/"));
+		String folder = UtilsText.concat(new File(Global.getBasePath().getSource()).getAbsolutePath(), File.separator, tables.getRepositoryPath());
 		String path = UtilsText.concat(folder, File.separator, fileName, "Dao.java");
 
 		String baseFolder = UtilsText.concat(folder, File.separator, "base");
@@ -241,9 +241,7 @@ public class MakeTable extends BaseMake {
 		List<Map<String, String>> pkColumns = columnsResultSet.getPrimaryColumns();
 
 		String fileName = table.getFileName();
-		String defaultPackage = tables.getDefaultPackage();
-		
-		String modelPackage = replaceModelPackage(defaultPackage);
+		String modelPackage = tables.getModelPackage();
 		
 
 		Map<String, Object> data = new HashMap<>();
@@ -254,7 +252,7 @@ public class MakeTable extends BaseMake {
 		data.put("name", table.getName());
 		data.put("desc", table.getDesc());
 
-		String folder = UtilsText.concat(new File(Global.getBasePath().getSource()).getAbsolutePath(), File.separator, modelPackage.replace(".", "/"));
+		String folder = UtilsText.concat(new File(Global.getBasePath().getSource()).getAbsolutePath(), File.separator, tables.getModelPath());
 		String path = UtilsText.concat(folder, File.separator, fileName, ".java");
 
 		String baseFolder = UtilsText.concat(folder, File.separator, "base");
@@ -308,17 +306,17 @@ public class MakeTable extends BaseMake {
 
 
 		String fileName = table.getFileName();
-		String defaultPackage = tables.getDefaultPackage();
+		String repositoryPackage = tables.getRepositoryPackage();
 		
-		String modelPackage = replaceModelPackage(defaultPackage);
+		String modelPackage = tables.getModelPackage();
 		
 		
 		Map<String, Object> data = new HashMap<>();
 		data.put("fileName", fileName);
-		data.put("package", defaultPackage);
+		data.put("package", repositoryPackage);
 		data.put("name", table.getName());
 		data.put("desc", table.getDesc());
-		data.put("mapperid", UtilsText.concat(defaultPackage, ".", fileName, "Dao"));
+		data.put("mapperid", UtilsText.concat(repositoryPackage, ".", fileName, "Dao"));
 		data.put("model", UtilsText.concat(modelPackage, ".", fileName));
 		data.put("date", UtilsDate.today(UtilsDate.DEFAULT_DATETIME_PATTERN));
 		data.put("resultMap", Sql.resultMap(tables, table, columns, pkColumns));
@@ -329,7 +327,7 @@ public class MakeTable extends BaseMake {
 		data.put("update", Sql.update(tables, table, columns, pkColumns, false));
 		data.put("delete", Sql.delete(tables, table, columns, pkColumns, false));
 		
-		String folder = UtilsText.concat(new File(Global.getBasePath().getResources()).getAbsolutePath(), File.separator, tables.getMappersPath());
+		String folder = UtilsText.concat(new File(Global.getBasePath().getResources()).getAbsolutePath(), File.separator, tables.getSubPathMappers());
 		String path = UtilsText.concat(folder, File.separator, File.separator, fileName, "Mapper.xml");
 
 		String baseFolder = UtilsText.concat(folder, File.separator, "base");
