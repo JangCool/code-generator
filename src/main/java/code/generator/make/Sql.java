@@ -488,47 +488,7 @@ public class Sql {
 		return columnStr;
 	}
 	
-//	String bind = UtilsText.concat("#{", columnName, ", jdbcType=", jdbcType(dataType), "}");
-//
-//	if ("VARCHAR".equals(jdbcType(dataType)) || "VARCHAR2".equals(jdbcType(dataType))) {
-//
-//		StringBuilder insertEmpty = new StringBuilder();
-//		insertEmpty.append(UtilsText.concat("<choose> "));
-//		insertEmpty.append(UtilsText.concat("<when test=\"", columnName, " == null", " or ", columnName,
-//				" == ''\"> "));
-//		insertEmpty.append(" null ");
-//		insertEmpty.append(UtilsText.concat("</when>"));
-//		insertEmpty.append(UtilsText.concat("<otherwise>"));
-//		insertEmpty.append(UtilsText.concat("#{", columnName, ", jdbcType=", jdbcType(dataType), "} "));
-//		insertEmpty.append(UtilsText.concat("</otherwise>"));
-//		insertEmpty.append(UtilsText.concat("</choose>"));
-//
-//		bind = insertEmpty.toString();
-//	} else {
-//		bind = UtilsText.concat("#{", columnName, ", jdbcType=", jdbcType(dataType), "}");
-//	}
-//
-//	if ("date".equals(dataType) || "datetime".equals(dataType) || "datetime2".equals(dataType)) {
-//
-//		String[] defaultDateColumns = Global.getRegDateColumn().toUpperCase().split("\\,");
-//
-//		boolean isDefaultDate = false;
-//		for (int j = 0; j < defaultDateColumns.length; j++) {
-//			if (orgColumnName.equals(defaultDateColumns[j].toUpperCase())) {
-//				isDefaultDate = true;
-//				break;
-//			}
-//		}
-//		if (isDefaultDate) {
-//			bind = UtilsText.concat("<choose><when test=\"", columnName, " != null\">#{", columnName,
-//					", jdbcType=", jdbcType(dataType), "}</when><otherwise>",
-//					getDateTime(repositoryVO.getdBInfo()), "</otherwise></choose>");
-//		} else {
-//			bind = UtilsText.concat("<choose><when test=\"", columnName, " != null\">#{", columnName,
-//					", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
-//		}
-//
-//	}
+
 	
 	private static String bindColumnOfInsert(TablesElement tables, TableElement table, List<Map<String, String>> columns) throws Exception{
 
@@ -547,7 +507,9 @@ public class Sql {
 			
 			boolean isAutoIncrement = isAutoIncrement(column);
 			boolean isExclude = isExcludeColumn(columnName, column);
-
+			boolean isTypeString = ("VARCHAR".equals(jdbcType(dataType)) || "VARCHAR2".equals(jdbcType(dataType)));
+			boolean isTypeDate = ("DATE".equals(dataType) || "DATETIME".equals(dataType) || "DATETIME2".equals(dataType)  || "TIMESTAMP".equals(dataType));
+			
 			columnName = getColumnName(table, columnName);
 	
 			if( isAutoIncrement || isExclude ) {
@@ -582,7 +544,7 @@ public class Sql {
 			
 			tempBindColumn += "} ";
 
-			if ("VARCHAR".equals(jdbcType(dataType)) || "VARCHAR2".equals(jdbcType(dataType))) {
+			if (isTypeString) {
 			
 				bindColumn += "<choose> ";
 				bindColumn += "<when test=\'" + columnName + " == null  or " + columnName +" == \\\"\\\"'> ";
@@ -593,7 +555,7 @@ public class Sql {
 				bindColumn += "</otherwise> ";
 				bindColumn += "</choose> ";
 			
-			}else if ("DATE".equals(dataType) || "DATETIME".equals(dataType) || "DATETIME2".equals(dataType)  || "TIMESTAMP".equals(dataType)) {
+			}else if (isTypeDate) {
 			
 					String[] defaultDateColumns = {"REG_DTIME","MODIFY_DTIME"};
 			
@@ -643,13 +605,152 @@ public class Sql {
 		mapperSql += "@Update(\"";
 		mapperSql += "<script> ";
 		mapperSql += "UPDATE " + table.getName() +" SET ";
-		mapperSql += insertColumns(tables, table, columnsRs) +") ";
+		mapperSql += updateColumns(tables, table, columnsRs) +") ";
 		mapperSql += "WHERE ";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs)+") ";
 		mapperSql += "</script> ";
 		mapperSql += "\")";
 		
 		return mapperSql;
+	}
+
+	private static String updateColumns(TablesElement tables, TableElement table, List<Map<String, String>> columns) {
+//		if (!"VARCHAR".equals(jdbcType(dataType)) && !"VARCHAR2".equals(jdbcType(dataType))) {
+//
+//			if ("date".equals(dataType) || "datetime".equals(dataType) || "datetime2".equals(dataType)) {
+//
+//				String[] defaultDateColumns = repositoryVO.getModDateColumn().toUpperCase().split("\\,");
+//
+//				boolean isDefaultDate = false;
+//				for (int j = 0; j < defaultDateColumns.length; j++) {
+//					if (orgColumnName.equals(defaultDateColumns[j].toUpperCase())) {
+//						isDefaultDate = true;
+//						break;
+//					}
+//				}
+//				if (isDefaultDate) {
+//					sb.append("\t\t\t").append(UtilsText.concat(orgColumnName, "=",
+//							getDateTime(repositoryVO.getdBInfo()), ", \n"));
+//				} else {
+//					sb.append("\t\t\t").append(UtilsText.concat("<if test=\"", columnName, " != null\"> \n"));
+//					sb.append("\t\t\t\t").append(orgColumnName).append(" = ").append(
+//							UtilsText.concat("#{", columnName, ", jdbcType=", jdbcType(dataType), "}, \n"));
+//					sb.append("\t\t\t").append(UtilsText.concat("</if> \n"));
+//				}
+//			} else {
+//				sb.append("\t\t\t").append(UtilsText.concat("<if test=\"", columnName, " != null\"> \n"));
+//				sb.append("\t\t\t\t").append(orgColumnName).append(" = ")
+//						.append(UtilsText.concat("#{", columnName, ", jdbcType=", jdbcType(dataType), "}, \n"));
+//				sb.append("\t\t\t").append(UtilsText.concat("</if> \n"));
+//			}
+//
+//		} else {
+//
+//			sb.append("\t\t\t").append(UtilsText.concat("<if test=\"", columnName, " != null\"> \n"));
+//			sb.append("\t\t\t\t").append(UtilsText.concat("<choose> \n"));
+//			sb.append("\t\t\t\t\t").append(UtilsText.concat("<when test=\"", columnName, " == ''\"> \n"));
+//			sb.append("\t\t\t\t\t\t").append(orgColumnName).append(" = null, \n");
+//			sb.append("\t\t\t\t\t").append(UtilsText.concat("</when> \n"));
+//			sb.append("\t\t\t\t\t").append(UtilsText.concat("<otherwise> \n"));
+//			sb.append("\t\t\t\t\t\t").append(orgColumnName).append(" = ")
+//					.append(UtilsText.concat("#{", columnName, ", jdbcType=", jdbcType(dataType), "}, \n"));
+//			sb.append("\t\t\t\t\t").append(UtilsText.concat("</otherwise> \n"));
+//			sb.append("\t\t\t\t").append(UtilsText.concat("</choose> \n"));
+//			sb.append("\t\t\t").append(UtilsText.concat("</if> \n"));
+//		}
+		
+
+		String bindColumn = "";
+		
+		int columnSize = columns.size();
+		
+		
+		for (int i = 0; i < columnSize; i++) {
+			
+			Map<String, String> column = columns.get(i);
+			String orgColumnName = column.get(Const.COLUMN_NAME);
+			String columnName = orgColumnName;
+			String dataType = column.get(Const.DATA_TYPE).toUpperCase();
+			String val = UtilsText.convert2CamelCase(columnName);
+			
+			boolean isAutoIncrement = isAutoIncrement(column);
+			boolean isExclude = isExcludeColumn(columnName, column);
+			boolean isTypeString = ("VARCHAR".equals(jdbcType(dataType)) || "VARCHAR2".equals(jdbcType(dataType)));
+			boolean isTypeDate = ("DATE".equals(dataType) || "DATETIME".equals(dataType) || "DATETIME2".equals(dataType)  || "TIMESTAMP".equals(dataType));
+
+			columnName = getColumnName(table, columnName);
+	
+			if( isAutoIncrement || isExclude ) {
+				continue;
+			}
+			
+			bindColumn += "<if test=\'"+val+" != null\'>";
+			
+			if (i > 0) {
+				bindColumn += ", ";
+			}
+			
+			String tempBindColumn = "";
+			
+			tempBindColumn += getColumnName(table, columnName, false) + "=#{" + val;
+			
+			Map<String, ColumnElement> columnElementMap = table.getCacheColumnResultSetMap();
+			
+			if(columnElementMap != null && columnElementMap.get(columnName) != null) {
+				
+				ColumnElement columnElement  = columnElementMap.get(columnName);
+				
+				//jdbcType은 기본으로 설정한다.
+				tempBindColumn += ", jdbcType="+ (UtilsText.isBlank(columnElement.getJdbcType()) ? jdbcType(dataType) : columnElement.getJdbcType());
+			
+				if (!UtilsText.isBlank(columnElement.getTypeHandler())) {
+					tempBindColumn += ", typeHandler=" + columnElement.getTypeHandler();
+				}
+				
+			} else {
+				tempBindColumn += ", jdbcType=" + jdbcType(dataType);
+			}
+			
+			tempBindColumn += "} ";
+
+			if (isTypeString) {
+				bindColumn += "<choose> ";
+				bindColumn += "<when test=\'" + columnName + " == null  or " + columnName +" == \\\"\\\"'> ";
+				bindColumn += "null ";
+				bindColumn += "</when> ";
+				bindColumn += "<otherwise> ";
+				bindColumn += tempBindColumn;
+				bindColumn += "</otherwise> ";
+				bindColumn += "</choose> ";
+
+			
+			}else if (isTypeDate) {
+			
+
+				String[] defaultDateColumns = {"REG_DTIME","MODIFY_DTIME"};
+		
+				boolean isDefaultDate = false;
+				for (int j = 0; j < defaultDateColumns.length; j++) {
+					if (orgColumnName.equals(defaultDateColumns[j].toUpperCase())) {
+						isDefaultDate = true;
+						break;
+					}
+				}
+				if (isDefaultDate) {
+					bindColumn +=  UtilsText.concat("<choose><when test='", columnName, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
+				} else {
+					bindColumn += UtilsText.concat("<choose><when test='", columnName, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
+				}
+				
+			} else {
+				bindColumn += tempBindColumn;
+			}
+			
+			bindColumn += "</if>";
+
+			
+		}
+		return bindColumn;
 	}
 
 	public static String delete(TablesElement tables, TableElement table, List<Map<String, String>> columnsRs, List<Map<String, String>> pkColumnsRs) throws Exception {

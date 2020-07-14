@@ -19,7 +19,7 @@ apply plugin: 'eclipse'
 		- group		: 프로젝트가 속해 있는 그룹 정의.
 		- version	: 프로젝트 개발 버전 정의 
  -----------------------------------------------------------------------------------------------------------*/
-group	= 'code.generator'
+group	= 'kr.co.pionnet.tech'
 version	= '1.0'
 
 
@@ -36,8 +36,8 @@ apply from: 'dependency.gradle'                  //의존 라이브러리를 읽
 	local maven 저장소에 배포할 정보를 미리 선언 한다.
  -----------------------------------------------------------------------------------------------------------*/
 def dependency = [
-	groupId		: "kr.co.pionnet.hamonica",
-	artifactId	: "hamonica-admin",
+	groupId		: "kr.co.pionnet.tech",
+	artifactId	: "code-generator",
 	version		: "1.0"
 ]
 
@@ -47,9 +47,9 @@ def dependency = [
 
 // 일반 jar 파일 생성 실행 설정 
 jar {
-	enabled = false
-    baseName = '${dependency.artifactId}'
-    version =  '${dependency.version}'
+	enabled = true
+    baseName = "${dependency.artifactId}"
+    version =  "${dependency.version}"
 }
 
 configurations {
@@ -113,3 +113,10 @@ allprojects {
 
 }
 
+
+task copyJar(type: Copy) {
+    from 'build/libs/code-generator-1.0.jar'
+    into "../common/generator/lib"
+}
+
+build.dependsOn copyJar
