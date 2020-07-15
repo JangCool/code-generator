@@ -32,6 +32,9 @@ public class MakeService extends BaseMake{
 
 		
 		List<ServicesElement> servicesList = getConfiguration().getServices();
+		if(servicesList == null) {
+			return;
+		}
 		
    		int servicesListSize = servicesList.size();
    		if(servicesListSize > 0 ) {

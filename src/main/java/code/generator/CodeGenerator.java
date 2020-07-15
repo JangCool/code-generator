@@ -75,18 +75,19 @@ public class CodeGenerator {
 //			BaseMake processJavascript = new MakeJavascript(xmlParser);
 //			processJavascript.generator();
 //
-
-			DBInfo dbInfo = new DBInfo(configurationElement.getJdbc());
-			 
-			DBConnection dbConn = new DBConnection(dbInfo);
-			ColumnsResultSet columnsResultSet = new ColumnsResultSet(dbConn);
+			if(configurationElement.getTables() != null) {
 			
-			BaseMake processDao = new MakeTable(configurationElement,columnsResultSet);
-			processDao.generator();
+				DBInfo dbInfo = new DBInfo(configurationElement.getJdbc());
+				 
+				DBConnection dbConn = new DBConnection(dbInfo);
+				ColumnsResultSet columnsResultSet = new ColumnsResultSet(dbConn);
+				
+				BaseMake processDao = new MakeTable(configurationElement,columnsResultSet);
+				processDao.generator();
+				
+				dbConn.close();
 			
-			dbConn.close();
-
-		    
+			}
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}

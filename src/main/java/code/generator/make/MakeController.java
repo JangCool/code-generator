@@ -32,6 +32,9 @@ public class MakeController extends BaseMake{
 
 		
 		List<ControllersElement> controllersList = getConfiguration().getControllers();
+		if(controllersList == null) {
+			return;
+		}
 		
    		int controllersListSize = controllersList.size();
    		if(controllersListSize > 0 ) {
