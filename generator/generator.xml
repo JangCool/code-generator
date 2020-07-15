@@ -2,17 +2,13 @@
 <!DOCTYPE configuration SYSTEM "dtd/generator.dtd">
 <configuration>
 
-	<properties>
-		<property key="package.base" value="com.zen9.capelion.base"></property>
-	</properties>
+	<global>
+		<base-package
+			model="kr.co.pionnet.hamonica.ims" 
+			repository="kr.co.pionnet.hamonica.ims"
+		/>
+	</global>
 
-	<!-- db 접속 정보 설정 -->
-<!-- 	<jdbc
-		url="jdbc:mysql://db.zen9.com:53306/missha?characterEncoding=utf8&amp;serverTimezone=Asia/Seoul"
-		driver-class="com.mysql.jdbc.Driver"
-		username="missha"
-		password="missha2019!@"
-	/> -->
 	<jdbc
 		url="jdbc:h2:tcp://localhost/~/test"
 		driver-class="org.h2.Driver"
@@ -20,17 +16,18 @@
 		password=""
 	/>
 
-<!-- 	<global> -->
-<!-- 		<base-package  -->
-<!-- 			controller = "${package.base}" -->
-<!-- 			service = "${package.base}" -->
-<!-- 			target = "${package.base}" -->
-<!-- 		/> -->
-<!-- 	</global> -->
+<!-- 	<controllers business="sample"> -->
+<!-- 		<controller name="Sample" request-mapping="sample"/> -->
+<!-- 		<controller name="Sample1" type="rest" all-in-one="true"/> -->
+<!-- 	</controllers> -->
 	
-	<tables business="sample" suffix-package="repository" base-mappers="false">
-		<table name="TEST"  desc="테스트" />
-	</tables>
+<!-- 	<services business="sample" proxy-target-class="false"> -->
+<!-- 		<service name="Sample2" /> -->
+<!-- 	</services> -->
+	
+<!-- 	<tables business="sample" base-mappers="false"> -->
+<!-- 		<table name="TEST"  desc="테스트" /> -->
+<!-- 	</tables> -->
 <!-- 	<tables business="sample" suffix-package="repository"> -->
 <!-- 		<table name="TEST"  desc="테스트" alias="t"> -->
 <!-- 			<column name="ID" typeHandler="TestHandler" /> -->
