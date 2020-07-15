@@ -17,6 +17,8 @@ import code.generator.jdbc.ColumnsResultSet;
 import code.generator.jdbc.DBConnection;
 import code.generator.jdbc.DBInfo;
 import code.generator.make.BaseMake;
+import code.generator.make.MakeController;
+import code.generator.make.MakeService;
 import code.generator.make.MakeTable;
 
 public class CodeGenerator {
@@ -58,21 +60,15 @@ public class CodeGenerator {
 			//global값 설정
 			Global.init(configurationElement.getGlobal());
 			
-			Log.debug(configurationElement);
-//			  
-//			
-//			BaseMake processController = new MakeController(xmlParser);
-//			processController.generator();
-//			
-//			BaseMake processService = new MakeService(xmlParser);
-//			processService.generator();
+			BaseMake processController = new MakeController(configurationElement);
+			processController.generator();
+			
+			BaseMake processService = new MakeService(configurationElement);
+			processService.generator();
 //			
 //			BaseMake processClient = new MakeClient(xmlParser);
 //			processClient.generator();
 //			
-//			BaseMake processDao = new MakeDaoMapper(xmlParser,processSql);
-//			processDao.generator();
-//
 //			BaseMake processJsp = new MakeJsp(xmlParser);
 //			processJsp.generator();
 //

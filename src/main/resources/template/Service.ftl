@@ -1,5 +1,5 @@
 package ${package};
-<#if '${proxyTargetProxy}' == 'true'>
+<#if proxyTargetClass?string("y","n") == "y">
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 

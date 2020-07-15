@@ -8,8 +8,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import code.generator.common.Global;
+import code.generator.util.UtilsText;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 @XmlRootElement(name = "controllers")
@@ -30,7 +31,33 @@ public class ControllersElement {
     @XmlAttribute
     private String type;
     
-
     @XmlElement(name = "controller")
     private List<ControllerElement> controller = null;
+    
+    
+	public String getControllerPackage() {
+		return (UtilsText.isBlank(this.defaultPackage) ? Global.getBasePackage().getRepository() : this.defaultPackage) +"."+ getSubPackage("controller");
+	}
+	
+	public String getControllerPath() {
+		return getControllerPackage().replace(".", "/");
+	}
+	
+	public String getSubPackage(String type) {
+		
+		String subPackage = "" ;
+		
+		subPackage += getBusiness();
+		subPackage += "."+ type;
+
+		return subPackage;
+	}
+	
+	public String getType() {
+		
+		if(UtilsText.isBlank(this.type)) {
+			return "Controller";
+		}
+		return type;
+	}
 }

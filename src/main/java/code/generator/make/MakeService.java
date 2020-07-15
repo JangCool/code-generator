@@ -1,111 +1,84 @@
-//package code.generator.make;
-//
-//import java.io.File;
-//import java.util.HashMap;
-//import java.util.Map;
-//
-//import org.w3c.dom.Element;
-//import org.w3c.dom.Node;
-//import org.w3c.dom.NodeList;
-//
-//import code.generator.common.Global;
-//import code.generator.common.Log;
-//import code.generator.parser.XmlParser;
-//import code.generator.util.UtilsText;
-//import code.generator.vo.ServiceVO;
-//
-//public class MakeService extends BaseMake{
-//	
-//	public MakeService() {
-//		super();
-//	}
-//	
-//	public MakeService(XmlParser xmlParser) {
-//		super(xmlParser);
-//	}
-//
-//	@Override
-//	public void generator() throws Exception {
-//		generator(null);
-//	}
-//
-//	@Override
-//	public void generator(String fileName) throws Exception {
-//
-//		
-//		NodeList services = xmlParser.getDoc().getElementsByTagName("services");
-//		
-//   		int servicesLength = services.getLength();
-//   		if(servicesLength > 0 ) {
-//	
-//	   		Log.println("");
-//	   		Log.debug("==================================== Service Generator ======================================");
-//	   		Log.debug("지금 Service 파일 생성을 시작 합니다.  ");
-//	   		Log.debug("");
-//	   		Log.debug("path source = " + Global.getPath().getSource());
-//   		}
-//   		
-//		for (int i = 0; i < servicesLength; i++) {
-//			
-//			Node nodeTables = services.item(i);
-//			Element elementTables = (Element) nodeTables;
-//			
-//	   		String pkg  				= getPropertyKey(elementTables.getAttribute("package"));
-//	   		String suffixPkg 			= getPropertyKey(elementTables.getAttribute("suffix-package"));
-//	   		String business				= getPropertyKey(elementTables.getAttribute("business"));
-//	   		String proxyTargetProxy		= getPropertyKey(elementTables.getAttribute("proxy-target-class"));
-//
-//	   		if(UtilsText.isBlank(pkg)) {
-//	   			pkg = Global.getServicePkg();
-//	   		}
-//
-//	   		ServiceVO cv = new ServiceVO();
-//			cv.setPkg(pkg);
-//			cv.setSuffixPkg(suffixPkg);
-//	   		cv.setBusiness(business);
-//	   		cv.setProxyTargetProxy(proxyTargetProxy);
-//	   		
-//	   		Log.debug("================================================================================================");
-//	   		Log.debug("business						= " + cv.getBusiness());
-//	   		Log.debug("package						= " + cv.getPkg());
-//	   		Log.debug("suffix-package 				= " + cv.getSuffixPkg());
-//	   		Log.debug("proxy-target-class			= " + cv.getProxyTargetProxy());
-//	   		Log.debug("================================================================================================");
-//
-//			
-//			NodeList childTables = elementTables.getElementsByTagName("service");						
-//	   		int childTablesLength = childTables.getLength();
-//	   		
-//			for (int j = 0; j < childTablesLength; j++) {
-//				if(childTables.item(i).getNodeType() == Node.ELEMENT_NODE){
-//			  		Element element = (Element) childTables.item(j);
-//			  		
-//			   		String serviceName  = getPropertyKey(element.getAttribute("name"));
-//			   		
-//					if (!UtilsText.isBlank(fileName)) {
-//						serviceName = fileName;
-//					}
-//			   	
-//					String folder = UtilsText.concat(getPathSources().getAbsolutePath(),File.separator,cv.getPkg().replace(".", "/"));		
-//					String path = UtilsText.concat(folder,File.separator,serviceName,"Service.java");
-//					
-//					String folderImpl = UtilsText.concat(getPathSources().getAbsolutePath(),File.separator,cv.getPkg().replace(".", "/"));		
-//					String pathImpl = UtilsText.concat(folder,File.separator,serviceName,"ServiceImpl.java");
-//					
-//			  		
-//					Map<String,String> data = new HashMap<>();
-//					data.put("serviceName"					, serviceName);
-//					data.put("package"						, cv.getPkg());
-//					data.put("proxyTargetProxy"				, cv.getProxyTargetProxy());
-//					 
-//					writeTemplate("Service", folder, path, data); 
-//
-//					if(!"true".equals(cv.getProxyTargetProxy())) {
-//						writeTemplate("ServiceImpl", folderImpl, pathImpl, data);						
-//					}
-//
-//				}
-//			}
-//		}
-//	}
-//}
+package code.generator.make;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import code.generator.common.Global;
+import code.generator.common.Log;
+import code.generator.elements.ConfigurationElement;
+import code.generator.elements.children.ServiceElement;
+import code.generator.elements.children.ServicesElement;
+import code.generator.util.UtilsText;
+
+public class MakeService extends BaseMake{
+	
+	public MakeService() {
+		super();
+	}
+	
+	public MakeService(ConfigurationElement configurationElement) {
+		super(configurationElement);
+	}
+
+	@Override
+	public void generator() throws Exception {
+		generator(null);
+	}
+	
+	@Override
+	public void generator(String fileName) throws Exception {
+
+		
+		List<ServicesElement> servicesList = getConfiguration().getServices();
+		
+   		int servicesListSize = servicesList.size();
+   		if(servicesListSize > 0 ) {
+	   			
+	   		Log.println("");
+	   		Log.debug("==================================== Service Generator ======================================");
+	   		Log.debug("지금 Service 파일 생성을 시작 합니다.  ");
+	   		Log.debug("");
+	   		Log.debug("path source = " + Global.getBasePath().getSource());
+   		
+   		}
+   		
+		for (int i = 0; i < servicesListSize; i++) {
+			
+			ServicesElement services = servicesList.get(i);
+			List<ServiceElement> serviceList = services.getService();
+			
+	   		Log.debug("================================================================================================");
+	   		Log.debug("business						= " + services.getBusiness());
+	   		Log.debug("package						= " + services.getServicePackage());
+	   		Log.debug("suffix-package 				= " + services.getSuffixPackage());
+	   		Log.debug("proxy-target-class			= " + services.isProxyTargetClass());
+	   		Log.debug("================================================================================================");
+			
+			
+			for (ServiceElement service : serviceList) {
+				
+		   		String serviceName	= service.getName();
+				
+				String folder = UtilsText.concat(new File(Global.getBasePath().getSource()).getAbsolutePath(), File.separator, services.getServicePath());
+				String path = UtilsText.concat(folder,File.separator,serviceName,"Service.java");
+				
+				String folderImpl = UtilsText.concat(new File(Global.getBasePath().getSource()).getAbsolutePath(),File.separator,services.getServicePath());		
+				String pathImpl = UtilsText.concat(folder,File.separator,serviceName,"ServiceImpl.java");
+				
+				
+				Map<String, Object> data = new HashMap<>();
+				data.put("serviceName"			, serviceName);
+				data.put("package"				, services.getServicePackage());
+				data.put("proxyTargetClass"		, services.isProxyTargetClass());
+				
+				writeTemplate("Service", folder, path, data); 
+
+				if(!services.isProxyTargetClass()) {
+					writeTemplate("ServiceImpl", folderImpl, pathImpl, data);						
+				}
+			}
+		}
+	}
+}
