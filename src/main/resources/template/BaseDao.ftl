@@ -31,7 +31,7 @@ public interface Base${fileName}Dao {
 	${fileName} findByPrimaryKey(<#if pkColumns??><#list pkColumns as column><#if column_index gt 0 > ,</#if>@Param("${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}") ${TableOperation.javaType('${column.DATA_TYPE}')} ${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}</#list></#if>) throws Exception;
 
     /**
-     * 이 findByObjectPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 findByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${findByPrimaryKey}
 	${fileName} findByPrimaryKey(${fileName} ${field}) throws Exception;
@@ -56,10 +56,10 @@ public interface Base${fileName}Dao {
 	int insert(${fileName} ${field}) throws Exception;
 	
     /**
-     * 이 updateByObjectPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 updateByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${updateByPrimaryKey}
-	int updateByObjectPrimaryKey(${fileName} ${field}) throws Exception;
+	int updateByPrimaryKey(${fileName} ${field}) throws Exception;
 	
     /**
      * 이 updateByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
@@ -74,10 +74,10 @@ public interface Base${fileName}Dao {
 	int deleteByPrimaryKey(<#if pkColumns??><#list pkColumns as column><#if column_index gt 0 > ,</#if>@Param("${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}") ${TableOperation.javaType('${column.DATA_TYPE}')} ${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}</#list></#if>) throws Exception;
 
 	/**
-     * 이 deleteByObjectPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 이 deleteByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${deleteByPrimaryKey} 
-	int deleteByObjectPrimaryKey(${fileName} ${field}) throws Exception;
+	int deleteByPrimaryKey(${fileName} ${field}) throws Exception;
 	
 	/**
      * 이 delete 메소드는 Code Generator를 통하여 생성 되었습니다.
