@@ -34,7 +34,7 @@ public interface Base${fileName}Dao {
      * 이 findByObjectPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${findByPrimaryKey}
-	${fileName} findByObjectPrimaryKey(${fileName} ${field}) throws Exception;
+	${fileName} findByPrimaryKey(${fileName} ${field}) throws Exception;
 
     /**
      * 이 findAll 메소드는 Code Generator를 통하여 생성 되었습니다.
