@@ -21,7 +21,11 @@
 	    </sql>
 	    
         <select id="findBy조건명" parameterType="${model}" resultType="${model}">
-		${findBy} 
+		<#if findBy??>
+			${findBy} 
+		<#else>
+			SELECT sample1, sample2 FROM Sample sample WHERE sample1 = 'mybatis valiable assign'
+	    </#if>
 	    </select>
 	    
 	    <insert id="insert조건명" parameterType="${model}">	
