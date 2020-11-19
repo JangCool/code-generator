@@ -221,7 +221,8 @@ public class Sql {
 				String columnName = column.get(Const.COLUMN_NAME);
 				
 				columnName = getColumnName(table, columnName);
-		
+				columnStr += "\t\t\t\t\t";
+
 				if (i > 0) {
 					columnStr += ", ";
 				}
@@ -229,6 +230,7 @@ public class Sql {
 				columnStr += columnName;
 		
 				i++;
+				columnStr += "\n";
 			}
 		}
 
@@ -324,9 +326,13 @@ public class Sql {
 			String val = UtilsText.convert2CamelCase(columnName);
 			
 			if(!isPrimaryKey) {
-				bindColumn += "<if test=\' "+val+" != null and "+val+" != \\\"\\\" \'>";
+				bindColumn += "\t\t\t\t";
+				bindColumn += "\t<if test=\' "+val+" != null and "+val+" != \\\"\\\" \'>\n";
 			}
 			
+			bindColumn += "\t\t\t\t";
+			bindColumn += " \t\t";
+
 			if(i > 0) {
 				bindColumn += " AND ";
 			}
@@ -351,10 +357,10 @@ public class Sql {
 				bindColumn += ", jdbcType=" + jdbcType(dataType);
 			}
 			
-			bindColumn += "} ";
+			bindColumn += "} \n";
 			
 			if(!isPrimaryKey) {
-				bindColumn += "</if>";
+				bindColumn += "\t\t\t\t\t</if>\n";
 			}
 		}
 	
@@ -372,15 +378,16 @@ public class Sql {
 		
 		String mapperSql = "";
 		
-		mapperSql += "@Select(\"";
-		mapperSql += "SELECT ";
+		mapperSql += "@Select(\"\"\"\n";
+		mapperSql += "\t\t\t\tSELECT \n";
 		mapperSql += selectColumns(tables, table, columnsRs) +" ";
-		mapperSql += "FROM ";
-		mapperSql += getTableName(table);
-		mapperSql += "WHERE ";
+		mapperSql += "\t\t\t\t"+"FROM \n";
+		mapperSql += "\t\t\t\t"+"\t" + getTableName(table) +"\n";
+		mapperSql += "\t\t\t\t"+"WHERE \n";
+		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\"AND\\\"> \n";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs);
-
-		mapperSql += "\")";
+		mapperSql += "\t\t\t\t"+"\t</trim> \n";
+		mapperSql += "\t\"\"\")";
 		
 		
 		return mapperSql;
@@ -390,12 +397,12 @@ public class Sql {
 		
 		String mapperSql = "";
 		
-		mapperSql += "@Select(\"";
-		mapperSql += "SELECT ";
-		mapperSql += selectColumns(tables, table, columnsRs) +" ";
-		mapperSql += "FROM ";
-		mapperSql += getTableName(table);
-		mapperSql += "\")";
+		mapperSql += "@Select(\"\"\"\n";
+		mapperSql += "\t\t\t\tSELECT \n";
+		mapperSql += selectColumns(tables, table, columnsRs);
+		mapperSql += "\t\t\t\t"+"FROM \n";
+		mapperSql += "\t\t\t\t"+"\t" + getTableName(table) +"\n";
+		mapperSql += "\t\"\"\")";
 		
 		
 		return mapperSql;
@@ -409,20 +416,21 @@ public class Sql {
 		String mapperSql = "";
 		
 		if(isAnnotation) {
-			mapperSql += "@Select(\"";
-			mapperSql += "<script> ";			
+			mapperSql += "@Select(\"\"\"\n";
+			mapperSql += "\t\t\t\t<script> \n";			
 		}
-
-		mapperSql += "SELECT ";
-		mapperSql += selectColumns(tables, table, columnsRs) +" ";
-		mapperSql += "FROM ";
-		mapperSql += getTableName(table);
-		mapperSql += "WHERE ";
+		mapperSql += "\t\t\t\tSELECT \n";
+		mapperSql += selectColumns(tables, table, columnsRs);
+		mapperSql += "\t\t\t\t"+"FROM \n";
+		mapperSql += "\t\t\t\t"+"\t" + getTableName(table) +"\n";
+		mapperSql += "\t\t\t\t"+"WHERE \n";
+		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\"AND\\\"> \n";
 		mapperSql += bindColumn(tables, table, columnsRs);
-		
+		mapperSql += "\t\t\t\t"+"\t</trim> \n";
+
 		if(isAnnotation) {
-			mapperSql += "</script> ";
-			mapperSql += "\")";
+			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t\"\"\")";
 		}
 		
 		return mapperSql;
@@ -601,18 +609,18 @@ public class Sql {
 		String mapperSql = "";
 		
 		if(isAnnotation) {
-			mapperSql += "@Insert(\"";
-			mapperSql += "<script> ";	
+			mapperSql += "@Insert(\"\"\"\n";
+			mapperSql += "\t\t\t\t<script> \n";			
 		}
 		
-		mapperSql += "INSERT INTO " + table.getName() +" (";
-		mapperSql += insertColumns(tables, table, columnsRs) +") ";
-		mapperSql += "VALUES (";
-		mapperSql += bindColumnOfInsert(tables, table, columnsRs)+") ";
+		mapperSql += "\t\t\t\t"+"INSERT INTO " + table.getName() +" \n";
+		mapperSql += "\t\t\t\t"+"\t\t(" + insertColumns(tables, table, columnsRs) + ") \n";
+		mapperSql += "\t\t\t\t"+"VALUES\n";
+		mapperSql += "\t\t\t\t"+"\t\t(" + bindColumnOfInsert(tables, table, columnsRs) + ") \n";
 
 		if(isAnnotation) {
-			mapperSql += "</script> ";
-			mapperSql += "\")";
+			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t\"\"\")";
 		}
 		
 		return mapperSql;
@@ -627,18 +635,18 @@ public class Sql {
 		String mapperSql = "";
 		
 		if(isAnnotation) {
-			mapperSql += "@Update(\"";
-			mapperSql += "<script> ";
+			mapperSql += "@Update(\"\"\"\n";
+			mapperSql += "\t\t\t\t<script> \n";		
 		}
 		
-		mapperSql += "UPDATE " + table.getName() +" SET ";
+		mapperSql += "\t\t\t\t" + "UPDATE " + table.getName() +" SET \n";
 		mapperSql += updateColumns(tables, table, columnsRs, pkColumnsRs);
-		mapperSql += "WHERE ";
+		mapperSql += "\t\t\t\t" + "WHERE \n";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs);
 	
 		if(isAnnotation) {
-			mapperSql += "</script> ";
-			mapperSql += "\")";
+			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t\"\"\")";
 		}
 		return mapperSql;
 	}
@@ -652,18 +660,18 @@ public class Sql {
 		String mapperSql = "";
 		
 		if(isAnnotation) {
-			mapperSql += "@Update(\"";
-			mapperSql += "<script> ";
+			mapperSql += "@Update(\"\"\"\n";
+			mapperSql += "\t\t\t\t<script> \n";		
 		}
 		
-		mapperSql += "UPDATE " + table.getName() +" SET ";
+		mapperSql += "\t\t\t\t" + "UPDATE " + table.getName() +" SET \n";
 		mapperSql += updateColumns(tables, table, columnsRs, pkColumnsRs);
-		mapperSql += "WHERE ";
+		mapperSql += "\t\t\t\t" + "WHERE \n";
 		mapperSql += bindColumn(tables, table, columnsRs);
 	
 		if(isAnnotation) {
-			mapperSql += "</script> ";
-			mapperSql += "\")";
+			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t\"\"\")";
 		}
 		return mapperSql;
 	}
@@ -713,8 +721,11 @@ public class Sql {
 				continue;
 			}
 			
-			bindColumn += "<if test=\'"+val+" != null\'>";
+			bindColumn += "\t\t\t\t";
+			bindColumn += "<if test=\'"+val+" != null\'>\n";
 			
+			bindColumn += "\t\t\t\t\t";
+
 			if (i > pkColumns.size()) {
 				bindColumn += ", ";
 			}
@@ -743,14 +754,14 @@ public class Sql {
 			tempBindColumn += "} ";
 
 			if (isTypeString) {
-				bindColumn += "<choose> ";
-				bindColumn += "<when test=\'" + val + " == null  or " + val +" == \\\"\\\"'> ";
-				bindColumn += "null ";
-				bindColumn += "</when> ";
-				bindColumn += "<otherwise> ";
-				bindColumn += tempBindColumn;
-				bindColumn += "</otherwise> ";
-				bindColumn += "</choose> ";
+				bindColumn += "<choose> \n";
+				bindColumn += "\t\t\t\t"+"\t\t<when test=\'" + val + " == null  or " + val +" == \\\"\\\"'> \n";
+				bindColumn += "\t\t\t\t"+"\t\t\t null \n";
+				bindColumn += "\t\t\t\t"+"\t\t</when> \n";
+				bindColumn += "\t\t\t\t"+"\t\t<otherwise> \n";
+				bindColumn += "\t\t\t\t"+"\t\t\t"+tempBindColumn+"\n";
+				bindColumn += "\t\t\t\t"+"\t\t</otherwise> \n";
+				bindColumn += "\t\t\t\t"+"\t</choose>";
 
 			
 			}else if (isTypeDate) {
@@ -766,7 +777,7 @@ public class Sql {
 					}
 				}
 				if (isDefaultDate) {
-					bindColumn +=  UtilsText.concat("<choose><when test='", val, " != null'>#{", val,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
+					bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>#{", val,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
 				} else {
 					bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>#{", val,", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
 				}
@@ -775,7 +786,7 @@ public class Sql {
 				bindColumn += tempBindColumn;
 			}
 			
-			bindColumn += "</if>";
+			bindColumn += "\n\t\t\t\t</if>\n";
 
 			
 		}
@@ -791,18 +802,20 @@ public class Sql {
 		String mapperSql = "";
 		
 		if(isAnnotation) {
-			mapperSql += "@Delete(\"";
-			mapperSql += "<script> ";
+			mapperSql += "@Delete(\"\"\"\n";
+			mapperSql += "\t\t\t\t<script> \n";		
 
 		}
 		
-		mapperSql += "DELETE FROM " + table.getName() +" ";
-		mapperSql += "WHERE ";
+		mapperSql +=  "\t\t\t\t" +"DELETE FROM " + table.getName() +" \n";
+		mapperSql +=  "\t\t\t\t" +"WHERE \n";
+		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\"AND\\\"> \n";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs);
+		mapperSql += "\t\t\t\t"+"\t</trim> \n";
 		
 		if(isAnnotation) {
-			mapperSql += "</script> ";
-			mapperSql += "\")";
+			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t\"\"\")";
 		}
 		
 		return mapperSql;
@@ -818,17 +831,19 @@ public class Sql {
 		String mapperSql = "";
 		
 		if(isAnnotation) {
-			mapperSql += "@Delete(\"";
-			mapperSql += "<script> ";
+			mapperSql += "@Delete(\"\"\"\n";
+			mapperSql += "\t\t\t\t<script> \n";		
 		}
 		
-		mapperSql += "DELETE FROM " + table.getName() +" ";
-		mapperSql += "WHERE ";
+		mapperSql +=  "\t\t\t\t" + "DELETE FROM " + table.getName() +" \n";
+		mapperSql +=  "\t\t\t\t" + "WHERE \n";
+		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\"AND\\\"> \n";
 		mapperSql += bindColumn(tables, table, columnsRs);
+		mapperSql += "\t\t\t\t"+"\t</trim> \n";
 		
 		if(isAnnotation) {
-			mapperSql += "</script> ";
-			mapperSql += "\")";
+			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t\"\"\")";
 		}
 		
 		return mapperSql;
@@ -838,9 +853,9 @@ public class Sql {
 		
 		String mapperSql = "";
 		
-		mapperSql += "@Delete(\"";
-		mapperSql += "DELETE FROM " + table.getName() +" ";
-		mapperSql += "\")";
+		mapperSql += "@Delete(\"\"\"\n";
+		mapperSql +=  "\t\t\t\t" +"DELETE FROM " + table.getName() +" ";
+		mapperSql += "\"\"\")";
 		
 		return mapperSql;
 	}
