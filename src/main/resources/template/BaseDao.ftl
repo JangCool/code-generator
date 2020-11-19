@@ -28,14 +28,13 @@ public interface Base${fileName}Dao {
      * 이 findByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${findByPrimaryKey}
-	${fileName} findByPrimaryKey(<#if pkColumns??><#list pkColumns as column><#if column_index gt 0 > ,</#if>@Param("${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}") ${TableOperation.javaType('${column.DATA_TYPE}')} ${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}</#list></#if>) throws Exception;
+	${fileName} findByPrimaryKeyParam(<#if pkColumns??><#list pkColumns as column><#if column_index gt 0 > ,</#if>@Param("${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}") ${TableOperation.javaType('${column.DATA_TYPE}')} ${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}</#list></#if>) throws Exception;
 
     /**
-     * 이 findByObjectPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
-     * 마이바티스에서는 매개변수가 다르고 메소드명이 같을 경우 같은 ID가 지정되었다며 충돌이 나기 때문에 메소드명을 다르게 해주었습니다.
+     * 이 findByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${findByPrimaryKey}
-	${fileName} findByObjectPrimaryKey(${fileName} ${field}) throws Exception;
+	${fileName} findByPrimaryKey(${fileName} ${field}) throws Exception;
 
     /**
      * 이 findAll 메소드는 Code Generator를 통하여 생성 되었습니다.
@@ -45,10 +44,22 @@ public interface Base${fileName}Dao {
 	List<${fileName}> findAll() throws Exception;
 	
     /**
+     * <pre>
      * 이 findBy 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 데이터 조회 건이 0개나 1개 이상일 경우 사용합니다.
+     * </pre>
      */
      ${find}
 	List<${fileName}> find(${fileName} ${field}) throws Exception;
+	
+    /**
+     * <pre>
+     * 이 findBy 메소드는 Code Generator를 통하여 생성 되었습니다.
+     * 데이터 조회 건이 0개나 1개일 경우 사용합니다. 1개이상 데이터가 조회되면 오류가 발생합니다.
+     * </pre>
+     */
+     ${find}
+	${fileName} findOne(${fileName} ${field}) throws Exception;
 		
     /**
      * 이 select 메소드는 Code Generator를 통하여 생성 되었습니다.
@@ -57,11 +68,10 @@ public interface Base${fileName}Dao {
 	int insert(${fileName} ${field}) throws Exception;
 	
     /**
-     * 이 updateByObjectPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
-     * 마이바티스에서는 매개변수가 다르고 메소드명이 같을 경우 같은 ID가 지정되었다며 충돌이 나기 때문에 메소드명을 다르게 해주었습니다.
+     * 이 updateByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${updateByPrimaryKey}
-	int updateByObjectPrimaryKey(${fileName} ${field}) throws Exception;
+	int updateByPrimaryKey(${fileName} ${field}) throws Exception;
 	
     /**
      * 이 updateByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
@@ -73,14 +83,13 @@ public interface Base${fileName}Dao {
      * 이 deleteByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${deleteByPrimaryKey} 
-	int deleteByPrimaryKey(<#if pkColumns??><#list pkColumns as column><#if column_index gt 0 > ,</#if>@Param("${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}") ${TableOperation.javaType('${column.DATA_TYPE}')} ${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}</#list></#if>) throws Exception;
+	int deleteByPrimaryKeyParam(<#if pkColumns??><#list pkColumns as column><#if column_index gt 0 > ,</#if>@Param("${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}") ${TableOperation.javaType('${column.DATA_TYPE}')} ${UtilsText.convert2CamelCase('${column.COLUMN_NAME}')}</#list></#if>) throws Exception;
 
 	/**
-     * 이 deleteByObjectPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
-     * 마이바티스에서는 매개변수가 다르고 메소드명이 같을 경우 같은 ID가 지정되었다며 충돌이 나기 때문에 메소드명을 다르게 해주었습니다.
+     * 이 deleteByPrimaryKey 메소드는 Code Generator를 통하여 생성 되었습니다.
      */
     ${deleteByPrimaryKey} 
-	int deleteByObjectPrimaryKey(${fileName} ${field}) throws Exception;
+	int deleteByPrimaryKey(${fileName} ${field}) throws Exception;
 	
 	/**
      * 이 delete 메소드는 Code Generator를 통하여 생성 되었습니다.
