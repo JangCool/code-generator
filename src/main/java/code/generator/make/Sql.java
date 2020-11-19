@@ -243,11 +243,12 @@ public class Sql {
 			return "SYSDATE";
 		} else if (dbInfo.isMssql()) {
 			return "getdate()";
-		} else if (dbInfo.isMysql() || dbInfo.isMaria()) {
+		} else if (dbInfo.isMysql() || dbInfo.isMaria() || dbInfo.isH2()) {
 			return "now(3)";
-		}else if(dbInfo.isH2()) {
-			return "CURRENT_TIMESTAMP()";
 		}
+//		}else if(dbInfo.isH2()) {
+//			return "CURRENT_TIMESTAMP()";
+//		}
 
 		return null;
 	}
@@ -324,10 +325,15 @@ public class Sql {
 			String columnName = column.get(Const.COLUMN_NAME);
 			String dataType = column.get(Const.DATA_TYPE);
 			String val = UtilsText.convert2CamelCase(columnName);
-			
+			boolean isTypeDate = ("DATE".equals(dataType) || "DATETIME".equals(dataType) || "DATETIME2".equals(dataType)  || "TIMESTAMP".equals(dataType));
+
 			if(!isPrimaryKey) {
 				bindColumn += "\t\t\t\t";
-				bindColumn += "\t<if test=\' "+val+" != null and "+val+" != \\\"\\\" \'>\n";
+				if(!isTypeDate) {
+					bindColumn += "\t<if test=\' "+val+" != null and "+val+" != \\\"\\\" \'>\n";
+				}else {
+					bindColumn += "\t<if test=\' "+val+" != null \'>\n";
+				}
 			}
 			
 			bindColumn += "\t\t\t\t";
@@ -398,10 +404,12 @@ public class Sql {
 		String mapperSql = "";
 		
 		mapperSql += "@Select(\"\"\"\n";
+		mapperSql += "\t\t\t\t<script> \n";		
 		mapperSql += "\t\t\t\tSELECT \n";
 		mapperSql += selectColumns(tables, table, columnsRs);
 		mapperSql += "\t\t\t\t"+"FROM \n";
 		mapperSql += "\t\t\t\t"+"\t" + getTableName(table) +"\n";
+		mapperSql += "\t\t\t\t</script> \n";
 		mapperSql += "\t\"\"\")";
 		
 		
@@ -575,7 +583,7 @@ public class Sql {
 			
 			}else if (isTypeDate) {
 			
-					String[] defaultDateColumns = {"REG_DTIME","MODIFY_DTIME"};
+					String[] defaultDateColumns = {"REG_DATETIME","MOD_DATETIME"};
 			
 					boolean isDefaultDate = false;
 					for (int j = 0; j < defaultDateColumns.length; j++) {
@@ -585,9 +593,9 @@ public class Sql {
 						}
 					}
 					if (isDefaultDate) {
-						bindColumn +=  UtilsText.concat("<choose><when test='", val, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
+						bindColumn +=  UtilsText.concat("<choose><when test='", val, " != null'>#{", val,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
 					} else {
-						bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>#{", columnName,", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
+						bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>#{", val,", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
 					}
 			} else {
 				bindColumn += tempBindColumn;
