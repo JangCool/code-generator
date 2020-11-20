@@ -648,10 +648,14 @@ public class Sql {
 		}
 		
 		mapperSql += "\t\t\t\t" + "UPDATE " + table.getName() +" SET \n";
+		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\",\\\"> \n";
 		mapperSql += updateColumns(tables, table, columnsRs, pkColumnsRs);
+		mapperSql += "\t\t\t\t"+"\t</trim> \n";
 		mapperSql += "\t\t\t\t" + "WHERE \n";
+		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\"AND\\\"> \n";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs);
-	
+		mapperSql += "\t\t\t\t"+"\t</trim> \n";
+
 		if(isAnnotation) {
 			mapperSql += "\t\t\t\t</script> \n";
 			mapperSql += "\t\"\"\")";
@@ -673,10 +677,14 @@ public class Sql {
 		}
 		
 		mapperSql += "\t\t\t\t" + "UPDATE " + table.getName() +" SET \n";
+		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\",\\\"> \n";
 		mapperSql += updateColumns(tables, table, columnsRs, pkColumnsRs);
+		mapperSql += "\t\t\t\t"+"\t</trim> \n";
 		mapperSql += "\t\t\t\t" + "WHERE \n";
+		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\"AND\\\"> \n";
 		mapperSql += bindColumn(tables, table, columnsRs);
-	
+		mapperSql += "\t\t\t\t"+"\t</trim> \n";
+
 		if(isAnnotation) {
 			mapperSql += "\t\t\t\t</script> \n";
 			mapperSql += "\t\"\"\")";
@@ -764,7 +772,7 @@ public class Sql {
 			if (isTypeString) {
 				bindColumn += "<choose> \n";
 				bindColumn += "\t\t\t\t"+"\t\t<when test=\'" + val + " == null  or " + val +" == \\\"\\\"'> \n";
-				bindColumn += "\t\t\t\t"+"\t\t\t null \n";
+				bindColumn += "\t\t\t\t"+"\t\t\t "+ getColumnName(table, columnName, false) + "=null \n";
 				bindColumn += "\t\t\t\t"+"\t\t</when> \n";
 				bindColumn += "\t\t\t\t"+"\t\t<otherwise> \n";
 				bindColumn += "\t\t\t\t"+"\t\t\t"+tempBindColumn+"\n";
@@ -785,9 +793,9 @@ public class Sql {
 					}
 				}
 				if (isDefaultDate) {
-					bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>#{", val,", jdbcType=", jdbcType(dataType), "}</when><otherwise>",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
+					bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>", getColumnName(table, columnName, false), "=#{", val,", jdbcType=", jdbcType(dataType), "}</when><otherwise>", getColumnName(table, columnName, false), "=",	getDateTime(tables.getDBInfo()), "</otherwise></choose>");
 				} else {
-					bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>#{", val,", jdbcType=", jdbcType(dataType), "}</when><otherwise>null</otherwise></choose>");
+					bindColumn += UtilsText.concat("<choose><when test='", val, " != null'>", getColumnName(table, columnName, false), "=#{", val,", jdbcType=", jdbcType(dataType), "}</when><otherwise>", getColumnName(table, columnName, false), "= null</otherwise></choose>");
 				}
 				
 			} else {
