@@ -58,7 +58,6 @@ public class TableElement {
 		
 		String otherFilename = (getRename() != null) ? getRename(): this.name;
 		
-		System.out.println(this.name);
 		
 		if (!UtilsText.isBlank(getPrefix())) {
 			otherFilename = UtilsText.concat(getPrefix(), fileName);
