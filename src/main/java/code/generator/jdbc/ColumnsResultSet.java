@@ -32,6 +32,10 @@ public class ColumnsResultSet {
 
 	private static final String SQL_H2DB_TABLE_CONSTRAINTS = "SELECT COLUMN_LIST FROM INFORMATION_SCHEMA.CONSTRAINTS WHERE  table_schema = SCHEMA() AND CONSTRAINT_TYPE='PRIMARY KEY' AND TABLE_NAME=?";
 	
+	private static final String SQL_HYPERSQL_TABLE_COLUMN = "SELECT column_name, type_name AS DATA_TYPE, ordinal_position, (SELECT comment FROM information_schema.system_comments sc WHERE sc.OBJECT_NAME = table_name AND SC.COLUMN_NAME = COLUMN_NAME) as comments, CASE WHEN is_autoincrement = 'YES' THEN 'Y' ELSE '' END AS auto_increment FROM information_schema.system_columns WHERE table_schem = 'PUBLIC' AND table_name = ? ORDER BY ordinal_position";
+
+	private static final String SQL_HYPERSQL_TABLE_CONSTRAINTS_PK = "SELECT POSITION('PK' IN CONSTRAINT_NAME) AS POSITION, issc.column_name, issc.type_name AS DATA_TYPE, (SELECT comment FROM information_schema.system_comments sc WHERE sc.object_name = kcu.table_name AND sc.column_name = kcu.column_name) as comments FROM information_schema.key_column_usage kcu,information_schema.system_columns issc WHERE kcu.table_schema = 'PUBLIC' AND kcu.table_name = ? AND kcu.table_name = issc.table_name AND kcu.table_schema = issc.table_schem  AND kcu.column_name = issc.column_name AND POSITION('PK' IN kcu.constraint_name) > 0 ORDER BY ordinal_position";
+
 
 	private DBConnection connection;
 
@@ -247,6 +251,36 @@ public class ColumnsResultSet {
 		}
 	}
 
+	public void callHyperSqlColumn(String tableName) {
+
+		clearColumns();
+		PreparedStatement pstmt = null;
+		PreparedStatement pkPstmt = null;
+		ResultSet rs = null;
+		ResultSet pkRs = null;
+
+		try {
+			pstmt = connection.getConnection().prepareStatement(SQL_HYPERSQL_TABLE_COLUMN);
+			pstmt.setString(1, tableName);
+
+			rs = pstmt.executeQuery();
+
+			setColumnsResultSet(rs);
+			
+			pkPstmt = connection.getConnection().prepareStatement(SQL_HYPERSQL_TABLE_CONSTRAINTS_PK);
+			pkPstmt.setString(1, tableName);
+
+			pkRs = pkPstmt.executeQuery();
+
+			setPKColumnsResultSet(pkRs);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+	}
 	
 
 	private void setColumnsResultSet(ResultSet rs) throws SQLException {

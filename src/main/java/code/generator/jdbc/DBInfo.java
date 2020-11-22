@@ -10,6 +10,7 @@ public class DBInfo {
 	private static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
 	private static final String MARIA_DRIVER = "org.mariadb.jdbc.Driver";
 	private static final String H2_DRIVER = "org.h2.Driver";
+	private static final String HYPERSQL_DRIVER = "org.hsqldb.jdbcDriver";
 	
 	
 	private String driver;
@@ -76,6 +77,10 @@ public class DBInfo {
 	
 	public boolean isH2() {
 		return (H2_DRIVER.equals(driver));
+	}
+	
+	public boolean isHyperSql() {
+		return (HYPERSQL_DRIVER.equals(driver));
 	}
 	
 }

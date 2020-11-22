@@ -74,6 +74,10 @@ public class MakeTable extends BaseMake {
 			columnsResultSet.callMariaColumn(tableName);
 		} else if (dbInfo.isH2()) {
 			columnsResultSet.callH2DBColumn(tableName);
+		} else if (dbInfo.isHyperSql()) {
+			columnsResultSet.callHyperSqlColumn(tableName);
+		}else {
+			Log.error("해당 JDBC Driver를 지원 하지 않습니다. ["+dbInfo.getDriver()+"]");
 		}
 
 		if (columnsResultSet.getColumns() == null || columnsResultSet.getColumns() != null && columnsResultSet.getColumns().size() == 0) {
