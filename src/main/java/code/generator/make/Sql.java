@@ -69,7 +69,7 @@ public class Sql {
 
 		}
 		
-		System.out.println("dataType : "+ dataType + ", java : "+ java);
+//		System.out.println("dataType : "+ dataType + ", java : "+ java);
 		return java;
 	}
 	
