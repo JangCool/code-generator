@@ -20,6 +20,7 @@ public class DBConnection {
             Class.forName(dbInfo.getDriver());
             this.connection = DriverManager.getConnection(dbInfo.getUrl(), dbInfo.getUsername(), dbInfo.getPassword());
         } catch (ClassNotFoundException ex) {
+        	ex.printStackTrace();
         	Log.error("Database Connection Creation Failed : " + ex.getMessage());
         }
     }
