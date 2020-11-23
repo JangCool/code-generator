@@ -30,6 +30,7 @@ public class Sql {
 			case "binary"				: java = "byte[]";						break;
 			case "bit"	 				: java = "java.lang.Boolean";			break;
 			case "char"	 				: java = "String";						break;
+			case "character"	 		: java = "String";						break;
 			case "date"					: java = "java.time.LocalDate";			break;
 			case "datetime"				: java = "java.time.LocalDateTime";		break;
 			case "datetime2"			: java = "java.time.LocalDateTime";		break;
@@ -68,6 +69,7 @@ public class Sql {
 
 		}
 		
+		System.out.println("dataType : "+ dataType + ", java : "+ java);
 		return java;
 	}
 	
@@ -92,6 +94,9 @@ public class Sql {
 			jdbc = "BIT";
 			break;
 		case "char":
+			jdbc = "CHAR";
+			break;
+		case "character":
 			jdbc = "CHAR";
 			break;
 		case "date":
