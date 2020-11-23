@@ -250,6 +250,8 @@ public class Sql {
 			return "getdate()";
 		} else if (dbInfo.isMysql() || dbInfo.isMaria() || dbInfo.isH2()) {
 			return "now(3)";
+		} else if (dbInfo.isHyperSql()) {
+			return "now()";
 		}
 //		}else if(dbInfo.isH2()) {
 //			return "CURRENT_TIMESTAMP()";
