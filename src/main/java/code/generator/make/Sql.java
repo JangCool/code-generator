@@ -350,7 +350,7 @@ public class Sql {
 			String dataType = column.get(Const.DATA_TYPE);
 			String val = UtilsText.convert2CamelCase(columnName);
 			
-			System.out.println(dataType);
+//			System.out.println(dataType);
 			boolean isTypeDate = ("DATE".equals(dataType.toUpperCase()) || "DATETIME".equals(dataType.toUpperCase()) || "DATETIME2".equals(dataType.toUpperCase())  || "TIMESTAMP".equals(dataType.toUpperCase()));
 
 			if(!isPrimaryKey) {
