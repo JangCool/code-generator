@@ -76,6 +76,8 @@ public class MakeTable extends BaseMake {
 			columnsResultSet.callH2DBColumn(tableName);
 		} else if (dbInfo.isHyperSql()) {
 			columnsResultSet.callHyperSqlColumn(tableName);
+		}else if (dbInfo.isPostgreSql()) {
+			columnsResultSet.callPostgreSqlColumn(tableName);
 		}else {
 			Log.error("해당 JDBC Driver를 지원 하지 않습니다. ["+dbInfo.getDriver()+"]");
 		}

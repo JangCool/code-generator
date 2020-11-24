@@ -36,6 +36,11 @@ public class ColumnsResultSet {
 
 	private static final String SQL_HYPERSQL_TABLE_CONSTRAINTS_PK = "SELECT POSITION('PK' IN CONSTRAINT_NAME) AS POSITION, issc.column_name, issc.type_name AS DATA_TYPE, (SELECT comment FROM information_schema.system_comments sc WHERE sc.object_name = kcu.table_name AND sc.column_name = kcu.column_name) as comments FROM information_schema.key_column_usage kcu,information_schema.system_columns issc WHERE kcu.table_schema = 'PUBLIC' AND kcu.table_name = ? AND kcu.table_name = issc.table_name AND kcu.table_schema = issc.table_schem  AND kcu.column_name = issc.column_name AND POSITION('PK' IN kcu.constraint_name) > 0 ORDER BY ordinal_position";
 
+	private static final String SQL_POSTGRESQL_TABLE_COLUMN = "SELECT sc.column_name , sc.udt_name as data_type, CASE WHEN is_identity = 'YES' THEN 'Y' ELSE '' END AS auto_increment , (SELECT PD.DESCRIPTION AS COLUMN_COMMENT FROM PG_STAT_ALL_TABLES PS ,PG_DESCRIPTION PD,PG_ATTRIBUTE PA WHERE PS.SCHEMANAME = (SELECT SCHEMANAME FROM PG_STAT_USER_TABLES WHERE RELNAME = sc.table_name ) AND PS.RELNAME  = sc.table_name and PA.ATTNAME = sc.column_name AND PS.RELID   = PD.OBJOID   AND PD.OBJSUBID <> 0   AND PD.OBJOID    = PA.ATTRELID   AND PD.OBJSUBID  = PA.ATTNUM ORDER BY PS.RELNAME, PD.OBJSUBID ) as comments FROM information_schema.columns sc WHERE sc.table_schema = 'public' AND sc.table_name = ? ORDER BY sc.ordinal_position";
+
+	private static final String SQL_POSTGRESQL_TABLE_CONSTRAINTS_PK = "SELECT sc.column_name , sc.udt_name as data_type, (SELECT PD.DESCRIPTION AS COLUMN_COMMENT FROM PG_STAT_ALL_TABLES PS ,PG_DESCRIPTION PD,PG_ATTRIBUTE PA WHERE PS.SCHEMANAME = (SELECT SCHEMANAME FROM PG_STAT_USER_TABLES WHERE RELNAME = sc.table_name ) AND PS.RELNAME  = sc.table_name and PA.ATTNAME = sc.column_name AND PS.RELID   = PD.OBJOID   AND PD.OBJSUBID <> 0 AND PD.OBJOID = PA.ATTRELID AND PD.OBJSUBID = PA.ATTNUM ORDER BY PS.RELNAME, PD.OBJSUBID ) as comments FROM information_schema.columns sc WHERE sc.table_schema = 'public' AND sc.table_name = ? and sc.column_name in (SELECT CC.COLUMN_NAME AS COLUMN_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS TC, INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE CC WHERE TC.table_schema = sc.table_schema AND TC.table_name = sc.table_name AND TC.constraint_type = 'PRIMARY KEY' AND TC.table_catalog = CC.table_catalog AND TC.table_schema = CC.table_schema AND TC.table_name = CC.table_name AND TC.CONSTRAINT_NAME = CC.CONSTRAINT_NAME) ORDER BY sc.ordinal_position";
+
+
 
 	private DBConnection connection;
 
@@ -268,6 +273,39 @@ public class ColumnsResultSet {
 			setColumnsResultSet(rs);
 			
 			pkPstmt = connection.getConnection().prepareStatement(SQL_HYPERSQL_TABLE_CONSTRAINTS_PK);
+			pkPstmt.setString(1, tableName);
+
+			pkRs = pkPstmt.executeQuery();
+
+			setPKColumnsResultSet(pkRs);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs);
+			DBUtil.close(pstmt);
+		}
+	}
+	
+	public void callPostgreSqlColumn(String tableName) {
+		//postgresql은 소문자로 테이블 검색해야함.
+		tableName = tableName.toLowerCase();
+		
+		clearColumns();
+		PreparedStatement pstmt = null;
+		PreparedStatement pkPstmt = null;
+		ResultSet rs = null;
+		ResultSet pkRs = null;
+
+		try {
+			pstmt = connection.getConnection().prepareStatement(SQL_POSTGRESQL_TABLE_COLUMN);
+			pstmt.setString(1, tableName);
+
+			rs = pstmt.executeQuery();
+
+			setColumnsResultSet(rs);
+			
+			pkPstmt = connection.getConnection().prepareStatement(SQL_POSTGRESQL_TABLE_CONSTRAINTS_PK);
 			pkPstmt.setString(1, tableName);
 
 			pkRs = pkPstmt.executeQuery();

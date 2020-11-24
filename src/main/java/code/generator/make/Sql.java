@@ -23,12 +23,13 @@ public class Sql {
 		
 		String java = null;
 		dataType = dataType.toLowerCase();
-
+//System.out.println(dataType);
 		switch (dataType) {
 			case "number"				: java = "java.lang.Long";				break; //oracle
 			case "bigint"				: java = "java.lang.Long";				break;
 			case "binary"				: java = "byte[]";						break;
 			case "bit"	 				: java = "java.lang.Boolean";			break;
+			case "bpchar" 				: java = "String";						break;//postgresql
 			case "char"	 				: java = "String";						break;
 			case "character"	 		: java = "String";						break;
 			case "date"					: java = "java.time.LocalDate";			break;
@@ -38,6 +39,9 @@ public class Sql {
 			case "float"				: java = "java.lang.Double";			break;
 			case "image"				: java = "byte[]";						break;
 			case "int"					: java = "java.lang.Integer";			break;
+			case "int2"					: java = "java.lang.Integer";			break;
+			case "int4"					: java = "java.lang.Integer";			break;
+			case "int8"					: java = "java.lang.Integer";			break;
 			case "integer"				: java = "java.lang.Integer";			break;
 			case "money"				: java = "java.math.BigDecimal";		break;
 			case "nchar"				: java = "String";						break;
@@ -82,7 +86,7 @@ public class Sql {
 
 		String jdbc = null;
 		dataType = dataType.toLowerCase();
-
+//System.out.println(dataType);
 		switch (dataType) {
 		case "bigint":
 			jdbc = "BIGINT";
@@ -121,6 +125,12 @@ public class Sql {
 			jdbc = "LONGVARBINARY";
 			break;
 		case "int":
+			jdbc = "INTEGER";
+		case "int2":
+			jdbc = "INTEGER";
+		case "int4":
+			jdbc = "INTEGER";
+		case "int8":
 			jdbc = "INTEGER";
 		case "integer":
 			jdbc = "INTEGER";
@@ -250,7 +260,7 @@ public class Sql {
 			return "getdate()";
 		} else if (dbInfo.isMysql() || dbInfo.isMaria() || dbInfo.isH2()) {
 			return "now(3)";
-		} else if (dbInfo.isHyperSql()) {
+		} else if (dbInfo.isHyperSql() || dbInfo.isPostgreSql()) {
 			return "now()";
 		}
 //		}else if(dbInfo.isH2()) {
@@ -306,8 +316,15 @@ public class Sql {
 	 * @param table
 	 * @return
 	 */
-	private static String getTableName(TableElement table) {
-		return ((table.getAlias() != null) ? table.getName() + " " + table.getAlias() : table.getName()) + " ";
+	private static String getTableName(TableElement table, DBInfo dbInfo) {
+		
+		String tableName = ((table.getAlias() != null) ? table.getName() + " " + table.getAlias() : table.getName()) + " ";
+		
+		if(dbInfo.isPostgreSql()) {
+			return tableName.toLowerCase();
+		}
+		
+		return tableName;
 	}
 
 	
@@ -395,7 +412,7 @@ public class Sql {
 		mapperSql += "\t\t\t\tSELECT \n";
 		mapperSql += selectColumns(tables, table, columnsRs) +" ";
 		mapperSql += "\t\t\t\t"+"FROM \n";
-		mapperSql += "\t\t\t\t"+"\t" + getTableName(table) +"\n";
+		mapperSql += "\t\t\t\t"+"\t" + getTableName(table, tables.getDBInfo()) +"\n";
 		mapperSql += "\t\t\t\t"+"WHERE \n";
 		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\"AND\\\"> \n";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs);
@@ -415,7 +432,7 @@ public class Sql {
 		mapperSql += "\t\t\t\tSELECT \n";
 		mapperSql += selectColumns(tables, table, columnsRs);
 		mapperSql += "\t\t\t\t"+"FROM \n";
-		mapperSql += "\t\t\t\t"+"\t" + getTableName(table) +"\n";
+		mapperSql += "\t\t\t\t"+"\t" + getTableName(table, tables.getDBInfo()) +"\n";
 		mapperSql += "\t\t\t\t</script> \n";
 		mapperSql += "\t\"\"\")";
 		
@@ -437,7 +454,7 @@ public class Sql {
 		mapperSql += "\t\t\t\tSELECT \n";
 		mapperSql += selectColumns(tables, table, columnsRs);
 		mapperSql += "\t\t\t\t"+"FROM \n";
-		mapperSql += "\t\t\t\t"+"\t" + getTableName(table) +"\n";
+		mapperSql += "\t\t\t\t"+"\t" + getTableName(table, tables.getDBInfo()) +"\n";
 		mapperSql += "\t\t\t\t"+"WHERE \n";
 		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\"AND\\\"> \n";
 		mapperSql += bindColumn(tables, table, columnsRs);
