@@ -349,7 +349,9 @@ public class Sql {
 			String columnName = column.get(Const.COLUMN_NAME);
 			String dataType = column.get(Const.DATA_TYPE);
 			String val = UtilsText.convert2CamelCase(columnName);
-			boolean isTypeDate = ("DATE".equals(dataType) || "DATETIME".equals(dataType) || "DATETIME2".equals(dataType)  || "TIMESTAMP".equals(dataType));
+			
+			System.out.println(dataType);
+			boolean isTypeDate = ("DATE".equals(dataType.toUpperCase()) || "DATETIME".equals(dataType.toUpperCase()) || "DATETIME2".equals(dataType.toUpperCase())  || "TIMESTAMP".equals(dataType.toUpperCase()));
 
 			if(!isPrimaryKey) {
 				bindColumn += "\t\t\t\t";
