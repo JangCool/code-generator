@@ -97,6 +97,9 @@ public class Sql {
 		case "bit":
 			jdbc = "BIT";
 			break;
+		case "bpchar":
+			jdbc = "CHAR";
+			break;
 		case "char":
 			jdbc = "CHAR";
 			break;
