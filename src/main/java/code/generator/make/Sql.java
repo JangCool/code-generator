@@ -414,6 +414,7 @@ public class Sql {
 		String mapperSql = "";
 		
 		mapperSql += "@Select(\"\"\"\n";
+		mapperSql += "\t\t\t\t<script> \n";		
 		mapperSql += "\t\t\t\tSELECT \n";
 		mapperSql += selectColumns(tables, table, columnsRs) +" ";
 		mapperSql += "\t\t\t\t"+"FROM \n";
@@ -422,6 +423,7 @@ public class Sql {
 		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\"AND\\\"> \n";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs);
 		mapperSql += "\t\t\t\t"+"\t</trim> \n";
+		mapperSql += "\t\t\t\t</script> \n";
 		mapperSql += "\t\"\"\")";
 		
 		
