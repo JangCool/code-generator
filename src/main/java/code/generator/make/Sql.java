@@ -23,7 +23,7 @@ public class Sql {
 		
 		String java = null;
 		dataType = dataType.toLowerCase();
-//System.out.println(dataType);
+//		System.out.println("javaType : " + dataType);
 		switch (dataType) {
 			case "number"				: java = "java.lang.Long";				break; //oracle
 			case "bigint"				: java = "java.lang.Long";				break;
@@ -37,6 +37,8 @@ public class Sql {
 			case "datetime2"			: java = "java.time.LocalDateTime";		break;
 			case "decimal"				: java = "java.math.BigDecimal";		break;
 			case "float"				: java = "java.lang.Double";			break;
+			case "float4"				: java = "java.lang.Double";			break;
+			case "float8"				: java = "java.lang.Double";			break;
 			case "image"				: java = "byte[]";						break;
 			case "int"					: java = "java.lang.Integer";			break;
 			case "int2"					: java = "java.lang.Integer";			break;
@@ -86,7 +88,7 @@ public class Sql {
 
 		String jdbc = null;
 		dataType = dataType.toLowerCase();
-//System.out.println(dataType);
+//System.out.println("jdbcType : " + dataType);
 		switch (dataType) {
 		case "bigint":
 			jdbc = "BIGINT";
@@ -122,6 +124,12 @@ public class Sql {
 			jdbc = "DOUBLE";
 			break;
 		case "float":
+			jdbc = "DOUBLE";
+			break;
+		case "float4":
+			jdbc = "DOUBLE";
+			break;
+		case "float8":
 			jdbc = "DOUBLE";
 			break;
 		case "image":
