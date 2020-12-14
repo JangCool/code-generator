@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	* : 요소가 가지고 있지 않거나 1개 이상 가질 수 있음.
+	+ : 자식요소가 최소 하나 이상 가질 수 있음
+	? : 단 하나의 요소만 가질 수 있음.
+	
+	#REQUIRED : 필수속성(생량X) 절대 생략 되지 않는다.
+    #IMPLIED : 선택속성(생략O) 써도인정 안써도 인정
+    #FIXED "값" : 속성 고정값 #FIXED "축구부" : 반드시 축구부만 사용할수 있다.
+	"값" : 속성 기본값 gen CDATA "m" : FIXED 와 비슷하게 사용 가능하다.
+-->
+
+<!-- configuration(root) 엘리먼트 정의-->		
+<!ELEMENT configuration (properties?,global?,protobufs?) >
+
+<!-- properties 엘리먼트 정의-->		
+<!ELEMENT properties (property*)>
+	<!ELEMENT property EMPTY>
+		<!ATTLIST property
+			key CDATA #REQUIRED
+			value CDATA #REQUIRED
+		>
+		
+<!-- global 엘리먼트 정의-->		
+<!ELEMENT global (base-path?)>
+	<!ELEMENT base-path EMPTY>
+	<!ATTLIST base-path
+		protoc CDATA #REQUIRED
+		java_out CDATA #REQUIRED
+		js_out CDATA #REQUIRED
+	>
+	
+<!-- controllers 엘리먼트 정의-->		
+<!ELEMENT protobufs (protobuf*)>
+	<!ATTLIST protobufs
+	>
+	<!ELEMENT protobuf EMPTY>
+	<!ATTLIST protobuf
+		name CDATA #REQUIRED
+	>
+	
+

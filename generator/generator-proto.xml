@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration SYSTEM "dtd/generator-proto.dtd">
+<configuration>
+	<global>
+		<base-path 
+			protoc=""
+			java_out="org.h2.Driver"
+			js_out="sa"
+		/>
+	</global>
+	<protobufs>
+		<protobuf name=""/> 
+	</protobufs>
+</configuration>
