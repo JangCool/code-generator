@@ -65,14 +65,14 @@ public class Protobuf {
 		   		
 		   		command.add(ProtoGlobal.getBaseProtoPath().getProtoc() + File.separator + "protoc");
 		   		
-		   		command.add("--proto_path=D:\\project\\hamonica\\workspace\\code-generator\\protobuf");
+		   		command.add("--proto_path=protobuf");
 
 		   		if(!UtilsText.isBlank(ProtoGlobal.getBaseProtoPath().getJavaOut()) && protobufsElement.isJava()) {
 			   		command.add("--java_out="+ProtoGlobal.getBaseProtoPath().getJavaOut());
 		   		}
 		   		
 		   		if(!UtilsText.isBlank(ProtoGlobal.getBaseProtoPath().getJsOut()) && protobufsElement.isJs()) {
-			   		command.add("--js_out="+ProtoGlobal.getBaseProtoPath().getJsOut());
+			   		command.add("--js_out=import_style=commonjs,binary:"+ProtoGlobal.getBaseProtoPath().getJsOut());
 		   		}
 		   		
 		   		command.add("proto/"+protobuf.getName()+".proto");
