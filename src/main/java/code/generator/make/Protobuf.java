@@ -77,8 +77,6 @@ public class Protobuf {
 		   		
 		   		command.add("proto/"+protobuf.getName()+".proto");
 		   		
-		   		Log.debug("command						= " + command.toString());
-		   		
 		   		builder.command(command);
 		   		
 //		   		builder.directory(new File(ProtoGlobal.getBaseProtoPath().getProtoc()));
@@ -87,8 +85,6 @@ public class Protobuf {
 		        Executors.newSingleThreadExecutor().submit(new StreamGobbler(process.getErrorStream(), System.out::println));
 		        int exitCode = process.waitFor();
 		        
-		   		Log.debug("exitCode						= " + exitCode);
-
 		        assert exitCode == 0;
 			}
 	   		Log.debug("================================================================================================");
