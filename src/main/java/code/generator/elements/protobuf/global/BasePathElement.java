@@ -1,4 +1,4 @@
-package code.generator.elements.children.global;
+package code.generator.elements.protobuf.global;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -16,18 +16,12 @@ import lombok.ToString;
 public class BasePathElement {
 	
     @XmlAttribute
-    private String template;
+    private String protoc;
     
-    @XmlAttribute
-    private String source;
+    @XmlAttribute(name = "java_out")
+    private String javaOut;
     
-    @XmlAttribute
-    private String resources;
+    @XmlAttribute(name = "js_out")
+    private String jsOut;
     
-    @XmlAttribute
-    private String views;
-    
-    @XmlAttribute
-    private String javascripts;
-    
-}
+}		

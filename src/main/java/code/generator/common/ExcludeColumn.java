@@ -1,6 +1,6 @@
 package code.generator.common;
 
-import code.generator.elements.children.global.ExcludeColumnElement;
+import code.generator.elements.jdbc.global.ExcludeColumnElement;
 import lombok.Data;
 
 @Data

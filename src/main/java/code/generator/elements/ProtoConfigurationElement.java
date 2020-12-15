@@ -16,6 +16,7 @@ import code.generator.elements.jdbc.ServicesElement;
 import code.generator.elements.jdbc.TablesElement;
 import code.generator.elements.jdbc.ViewsElement;
 import code.generator.elements.jdbc.global.GlobalElement;
+import code.generator.elements.protobuf.ProtobufsElement;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -23,30 +24,16 @@ import lombok.ToString;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Getter
 @ToString
-public class ConfigurationElement {
+public class ProtoConfigurationElement {
 	
 	@XmlElementWrapper(name = "properties")
     @XmlElement(name = "property")
     private List<PropertyElement> property = null;
 	
     @XmlElement(name = "global")
-    private GlobalElement global = null;
+    private code.generator.elements.protobuf.global.GlobalElement global = null;
     
-    @XmlElement(name = "jdbc")
-    private JdbcElement jdbc = null;
+    @XmlElement(name = "protobufs")
+    private List<ProtobufsElement> protobufs = null;
     
-    @XmlElement(name = "controllers")
-    private List<ControllersElement> controllers = null;
-    
-    @XmlElement(name = "services")
-    private List<ServicesElement> services = null;
-    
-    @XmlElement(name = "views")
-    private List<ViewsElement> views = null;
-    
-    @XmlElement(name = "javascripts")
-    private List<JavascriptsElement> javascripts = null;
-
-    @XmlElement(name = "tables")
-    private List<TablesElement> tables = null;
 }

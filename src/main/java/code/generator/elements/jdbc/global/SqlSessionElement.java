@@ -1,4 +1,4 @@
-package code.generator.elements.children.global;
+package code.generator.elements.jdbc.global;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -12,12 +12,10 @@ import lombok.ToString;
 @XmlAccessorType (XmlAccessType.FIELD)
 @Getter
 @ToString
-public class ExcludeColumnElement {
+public class SqlSessionElement {
 	
     @XmlAttribute
-    private String insert;
+    private String name;
     
-    @XmlAttribute
-    private String update;
     
 }

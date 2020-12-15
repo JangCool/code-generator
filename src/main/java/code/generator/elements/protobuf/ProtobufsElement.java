@@ -1,4 +1,4 @@
-package code.generator.elements.children;
+package code.generator.elements.protobuf;
 
 import java.util.List;
 
@@ -8,25 +8,23 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import code.generator.common.Global;
+import code.generator.util.UtilsText;
 import lombok.Getter;
 import lombok.ToString;
 
-@XmlRootElement(name = "javascripts")
+@XmlRootElement(name = "protobufs")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Getter
 @ToString
-public class JavascriptsElement {
+public class ProtobufsElement {
+	
+    @XmlElement(name = "protobuf")
+    private List<ProtobufElement> protobuf = null;
 	
     @XmlAttribute
-    private String business;
+    private boolean java;
     
-    @XmlAttribute(name = "target")
-    private String target;
-    
-    @XmlAttribute(name = "suffix-target")
-    private String suffixTarget;
-    
-
-    @XmlElement(name = "javascript")
-    private List<JavascriptElement> javascript = null;
+    @XmlAttribute
+    private boolean js;
 }

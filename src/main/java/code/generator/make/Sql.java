@@ -5,9 +5,9 @@ import java.util.Map;
 
 import code.generator.common.Const;
 import code.generator.common.Global;
-import code.generator.elements.children.ColumnElement;
-import code.generator.elements.children.TableElement;
-import code.generator.elements.children.TablesElement;
+import code.generator.elements.jdbc.ColumnElement;
+import code.generator.elements.jdbc.TableElement;
+import code.generator.elements.jdbc.TablesElement;
 import code.generator.exception.NotFoundPrimaryKey;
 import code.generator.jdbc.DBInfo;
 import code.generator.util.UtilsText;

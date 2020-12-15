@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option optimize_for = SPEED;
+
+option java_package = "kr.co.pionnet.hamonica.pack";
+option java_outer_classname = "SenderBuilder";
+
+
+message Sender{
+
+	
+	Type		type				= 1; // 데이터 전송 구분 
+	Target		target				= 2; // 데이터 전송 위치
+	Target		source				= 3; // 데이터 요청 위치
+	string		wsClientId			= 4; // 웹소켓 클라이언트 아이디
+	string		clientId			= 5; // client 아이디
+	string		agentId				= 6; // 에이전트 아이디
+	bytes		data				= 7; // 실제 전송되는 데이터
+	bool 		last				= 8; // 마지막 target 호출 여부
+	bool 		realTime			= 9; // 실시간 전송 데이터인지 유무.
+	
+	enum Target {
+		ADMIN = 0;
+		AGENT = 1;
+		COLLECTOR = 2;
+	}
+	
+	enum Type {
+		SENDER = 0;
+		HEART_BEAT = 1;
+	}
+}

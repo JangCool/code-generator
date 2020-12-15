@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option optimize_for = SPEED;
+
+option java_package = "kr.co.pionnet.hamonica.pack";
+option java_outer_classname = "ServerStatusBuilder";
+
+
+message ServerStatus{
+
+	ServerType			serverType			= 1; // 서버 유형, 에이전트, 콜렉터, 캐시
+	string				id					= 2; // 에이전트 아이디, 컬렉터 아이디, 캐시 서버 아이디 
+	string				ip					= 3; // 아이피
+	int32				port				= 4; // 포트 
+	Status		 		status				= 5; // 서버 종료 여부.
+
+	
+	enum ServerType {
+		AGENT = 0;
+		COLLECTOR = 1;
+		CACHE = 2;
+	}
+		
+	enum Status {
+		WAITING 	= 0;
+		RUNNING		= 1;
+		SHUTDOWN	= 2;
+	}
+}

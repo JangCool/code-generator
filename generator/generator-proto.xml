@@ -3,12 +3,17 @@
 <configuration>
 	<global>
 		<base-path 
-			protoc=""
-			java_out="org.h2.Driver"
-			js_out="sa"
+			protoc="D:\project.apps\protoc-3.13.0-win64\bin"
+			java_out="src/main/java"
+			js_out="../hamonica-ims/hamonica-fe/src/protobuf"
 		/>
 	</global>
-	<protobufs>
-		<protobuf name=""/> 
+	<protobufs java="true" js="true" >
+		<protobuf name="CacheMetricPack"/> 
+		<protobuf name="Command"/> 
+		<protobuf name="JvmMetricPack"/> 
+		<protobuf name="Sender"/> 
+		<protobuf name="ServerStatus"/> 
+		<protobuf name="TransactionPack"/> 
 	</protobufs>
 </configuration>

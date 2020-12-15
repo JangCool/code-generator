@@ -1,6 +1,6 @@
 package code.generator.jdbc;
 
-import code.generator.elements.children.JdbcElement;
+import code.generator.elements.jdbc.JdbcElement;
 import code.generator.exception.JDBCException;
 
 public class DBInfo {

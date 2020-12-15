@@ -1,4 +1,4 @@
-package code.generator.elements.children;
+package code.generator.elements.jdbc;
 
 import java.util.List;
 
@@ -11,11 +11,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Getter;
 import lombok.ToString;
 
-@XmlRootElement(name = "views")
+@XmlRootElement(name = "javascripts")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Getter
 @ToString
-public class ViewsElement {
+public class JavascriptsElement {
 	
     @XmlAttribute
     private String business;
@@ -26,11 +26,7 @@ public class ViewsElement {
     @XmlAttribute(name = "suffix-target")
     private String suffixTarget;
     
-    @XmlAttribute(name = "type")
-    private String type;
 
-    
-
-    @XmlElement(name = "view")
-    private List<ViewElement> view = null;
+    @XmlElement(name = "javascript")
+    private List<JavascriptElement> javascript = null;
 }

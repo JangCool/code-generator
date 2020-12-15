@@ -8,8 +8,8 @@ import java.util.Map;
 import code.generator.common.Global;
 import code.generator.common.Log;
 import code.generator.elements.ConfigurationElement;
-import code.generator.elements.children.ServiceElement;
-import code.generator.elements.children.ServicesElement;
+import code.generator.elements.jdbc.ServiceElement;
+import code.generator.elements.jdbc.ServicesElement;
 import code.generator.util.UtilsText;
 
 public class MakeService extends BaseMake{

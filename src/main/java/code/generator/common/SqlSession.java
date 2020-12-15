@@ -1,6 +1,6 @@
 package code.generator.common;
 
-import code.generator.elements.children.global.SqlSessionElement;
+import code.generator.elements.jdbc.global.SqlSessionElement;
 import lombok.Data;
 
 @Data

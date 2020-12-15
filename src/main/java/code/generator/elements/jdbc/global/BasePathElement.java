@@ -1,36 +1,33 @@
-package code.generator.elements.children;
+package code.generator.elements.jdbc.global;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import code.generator.common.Global;
 import lombok.Getter;
 import lombok.ToString;
 
-@XmlRootElement(name = "column")
 @XmlAccessorType (XmlAccessType.FIELD)
 @Getter
 @ToString
-public class ColumnElement {
+public class BasePathElement {
 	
     @XmlAttribute
-    private String name;
+    private String template;
     
     @XmlAttribute
-    private String alias;
+    private String source;
     
     @XmlAttribute
-    private String jdbcType;
+    private String resources;
     
     @XmlAttribute
-    private String typeHandler;
-
-    @XmlAttribute
-    private String type;
+    private String views;
     
     @XmlAttribute
-    private String typeValue;
-    
+    private String javascripts;
     
 }

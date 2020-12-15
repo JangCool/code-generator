@@ -28,12 +28,14 @@
 	<!ATTLIST base-path
 		protoc CDATA #REQUIRED
 		java_out CDATA #REQUIRED
-		js_out CDATA #REQUIRED
+		js_out CDATA #IMPLIED
 	>
 	
 <!-- controllers 엘리먼트 정의-->		
 <!ELEMENT protobufs (protobuf*)>
 	<!ATTLIST protobufs
+		java (true | false) #REQUIRED
+		js (false | true) #REQUIRED
 	>
 	<!ELEMENT protobuf EMPTY>
 	<!ATTLIST protobuf

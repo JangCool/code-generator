@@ -1,9 +1,8 @@
-package code.generator.elements.children.global;
+package code.generator.elements.jdbc;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Getter;
@@ -12,21 +11,18 @@ import lombok.ToString;
 @XmlAccessorType (XmlAccessType.FIELD)
 @Getter
 @ToString
-public class BasePackageElement {
+public class JdbcElement {
 	
     @XmlAttribute
-    private String controller;
+    private String url;
+    
+    @XmlAttribute(name = "driver-class")
+    private String driverClass;
     
     @XmlAttribute
-    private String service;
+    private String username;
     
     @XmlAttribute
-    private String repository;
-    
-    @XmlAttribute
-    private String model;
-    
-    @XmlAttribute
-    private String client;
+    private String password;
     
 }

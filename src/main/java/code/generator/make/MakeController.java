@@ -8,8 +8,8 @@ import java.util.Map;
 import code.generator.common.Global;
 import code.generator.common.Log;
 import code.generator.elements.ConfigurationElement;
-import code.generator.elements.children.ControllerElement;
-import code.generator.elements.children.ControllersElement;
+import code.generator.elements.jdbc.ControllerElement;
+import code.generator.elements.jdbc.ControllersElement;
 import code.generator.util.UtilsText;
 
 public class MakeController extends BaseMake{

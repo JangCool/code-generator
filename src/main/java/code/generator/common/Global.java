@@ -1,6 +1,6 @@
 package code.generator.common;
 
-import code.generator.elements.children.global.GlobalElement;
+import code.generator.elements.jdbc.global.GlobalElement;
 
 public class Global {
 	

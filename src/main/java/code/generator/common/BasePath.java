@@ -1,6 +1,6 @@
 package code.generator.common;
 
-import code.generator.elements.children.global.BasePathElement;
+import code.generator.elements.jdbc.global.BasePathElement;
 import lombok.Data;
 
 @Data
