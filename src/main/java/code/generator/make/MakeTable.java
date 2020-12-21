@@ -291,7 +291,7 @@ public class MakeTable extends BaseMake {
 			fieldMap.put("field", field);
 			fieldMap.put("field2", field2);
 			fieldMap.put("comment", comment);
-			fieldMap.put("javaType", Sql.javaType(dataType));
+			fieldMap.put("javaType", TableOperation.javaType(dataType));
 			
 			fieldList.add(fieldMap);
 		}

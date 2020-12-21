@@ -10,7 +10,8 @@ public class TableOperation {
 	 * @return String
 	 */
 	public static String javaType(String dataType) {
-		
+//		System.out.println("javaType : " + dataType);
+
 		String java = null;
 		dataType = dataType.toLowerCase();
 
@@ -20,13 +21,19 @@ public class TableOperation {
 			case "binary"				: java = "byte[]";						break;
 			case "bit"	 				: java = "java.lang.Boolean";			break;
 			case "char"	 				: java = "String";						break;
+			case "bpchar" 				: java = "String";						break;//postgresql
 			case "date"					: java = "java.sql.Timestamp";			break;
 			case "datetime"				: java = "java.sql.Timestamp";			break;
 			case "datetime2"			: java = "java.sql.Timestamp";			break;
 			case "decimal"				: java = "java.math.BigDecimal";		break;
 			case "float"				: java = "java.lang.Double";			break;
+			case "float4"				: java = "java.lang.Double";			break;
+			case "float8"				: java = "java.lang.Double";			break;
 			case "image"				: java = "byte[]";						break;
 			case "int"					: java = "java.lang.Integer";			break;
+			case "int2"					: java = "java.lang.Integer";			break;
+			case "int4"					: java = "java.lang.Integer";			break;
+			case "int8"					: java = "java.lang.Long";				break;
 			case "integer"				: java = "java.lang.Integer";			break;
 			case "money"				: java = "java.math.BigDecimal";		break;
 			case "nchar"				: java = "String";						break;
@@ -42,8 +49,8 @@ public class TableOperation {
 			case "text"					: java = "String";						break;
 			case "mediumtext"			: java = "String";						break;
 			case "longtext"				: java = "String";						break;
-			case "time"					: java = "java.sql.Time";				break;
-			case "timestamp"			: java = "byte[]";						break;
+			case "time"					: java = "java.time.LocalTime";			break;
+			case "timestamp"			: java = "java.time.LocalDateTime";		break;
 			case "tinyint"				: java = "java.lang.Short";				break;
 			case "udt"					: java = "byte[]";						break;
 			case "uniqueidentifier"		: java = "String";						break;
@@ -67,6 +74,7 @@ public class TableOperation {
 	 * @return String
 	 */
 	public static String jdbcType(String dataType) {
+//		System.out.println("jdbcType : " + dataType);
 
 		String jdbc = null;
 		dataType = dataType.toLowerCase();
@@ -80,6 +88,9 @@ public class TableOperation {
 			break;
 		case "bit":
 			jdbc = "BIT";
+			break;
+		case "bpchar":
+			jdbc = "CHAR";
 			break;
 		case "char":
 			jdbc = "CHAR";
@@ -102,10 +113,24 @@ public class TableOperation {
 		case "float":
 			jdbc = "DOUBLE";
 			break;
+		case "float4":
+			jdbc = "DOUBLE";
+			break;
+		case "float8":
+			jdbc = "DOUBLE";
+			break;
 		case "image":
 			jdbc = "LONGVARBINARY";
 			break;
 		case "int":
+			jdbc = "INTEGER";
+		case "int2":
+			jdbc = "INTEGER";
+		case "int4":
+			jdbc = "INTEGER";
+		case "int8":
+			jdbc = "NUMERIC";
+		case "integer":
 			jdbc = "INTEGER";
 			break;
 		case "money":
