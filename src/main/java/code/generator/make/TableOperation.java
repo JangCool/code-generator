@@ -182,7 +182,7 @@ public class TableOperation {
 			jdbc = "TIME";
 			break;
 		case "timestamp":
-			jdbc = "BINARY";
+			jdbc = "TIMESTAMP";
 			break;
 		case "tinyint":
 			jdbc = "TINYINT";
