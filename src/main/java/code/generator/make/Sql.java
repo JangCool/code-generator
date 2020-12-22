@@ -519,6 +519,7 @@ public class Sql {
 		
 		int columnSize = columns.size();
 		
+		boolean isFirst = true;
 		
 		for (int i = 0; i < columnSize; i++) {
 			
@@ -563,8 +564,10 @@ public class Sql {
 			
 			bindColumn += "\t\t\t\t\t";
 
-			if (i > pkColumns.size()) {
+			if (!isFirst) {
 				bindColumn += ", ";
+			} else {
+				isFirst = false;
 			}
 			
 			String tempBindColumn = "";
