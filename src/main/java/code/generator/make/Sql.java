@@ -204,7 +204,7 @@ public class Sql {
 		String mapperSql = "";
 		
 		mapperSql += "@Select(\"\"\"\n";
-		mapperSql += "\t\t\t\t<script> \n";		
+		mapperSql += "\t<script> \n";		
 		mapperSql += "\t\t\t\tSELECT \n";
 		mapperSql += selectColumns(tables, table, columnsRs) +" ";
 		mapperSql += "\t\t\t\t"+"FROM \n";
@@ -213,7 +213,7 @@ public class Sql {
 		mapperSql += "\t\t\t\t"+"\t<trim prefixOverrides=\\\"AND\\\"> \n";
 		mapperSql += bindColumnPrimaryKey(tables, table, pkColumnsRs);
 		mapperSql += "\t\t\t\t"+"\t</trim> \n";
-		mapperSql += "\t\t\t\t</script> \n";
+		mapperSql += "\t</script> \n";
 		mapperSql += "\t\"\"\")";
 		
 		
@@ -225,12 +225,12 @@ public class Sql {
 		String mapperSql = "";
 		
 		mapperSql += "@Select(\"\"\"\n";
-		mapperSql += "\t\t\t\t<script> \n";		
+		mapperSql += "\t<script> \n";		
 		mapperSql += "\t\t\t\tSELECT \n";
 		mapperSql += selectColumns(tables, table, columnsRs);
 		mapperSql += "\t\t\t\t"+"FROM \n";
 		mapperSql += "\t\t\t\t"+"\t" + getTableName(table, tables.getDBInfo()) +"\n";
-		mapperSql += "\t\t\t\t</script> \n";
+		mapperSql += "\t</script> \n";
 		mapperSql += "\t\"\"\")";
 		
 		
@@ -246,7 +246,7 @@ public class Sql {
 		
 		if(isAnnotation) {
 			mapperSql += "@Select(\"\"\"\n";
-			mapperSql += "\t\t\t\t<script> \n";			
+			mapperSql += "\t<script> \n";			
 		}
 		mapperSql += "\t\t\t\tSELECT \n";
 		mapperSql += selectColumns(tables, table, columnsRs);
@@ -258,7 +258,7 @@ public class Sql {
 		mapperSql += "\t\t\t\t"+"\t</trim> \n";
 
 		if(isAnnotation) {
-			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t</script> \n";
 			mapperSql += "\t\"\"\")";
 		}
 		
@@ -439,7 +439,7 @@ public class Sql {
 		
 		if(isAnnotation) {
 			mapperSql += "@Insert(\"\"\"\n";
-			mapperSql += "\t\t\t\t<script> \n";			
+			mapperSql += "\t<script> \n";			
 		}
 		
 		mapperSql += "\t\t\t\t"+"INSERT INTO " + table.getName() +" \n";
@@ -448,7 +448,7 @@ public class Sql {
 		mapperSql += "\t\t\t\t"+"\t\t(" + bindColumnOfInsert(tables, table, columnsRs) + ") \n";
 
 		if(isAnnotation) {
-			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t</script> \n";
 			mapperSql += "\t\"\"\")";
 		}
 		
@@ -465,7 +465,7 @@ public class Sql {
 		
 		if(isAnnotation) {
 			mapperSql += "@Update(\"\"\"\n";
-			mapperSql += "\t\t\t\t<script> \n";		
+			mapperSql += "\t<script> \n";		
 		}
 		
 		mapperSql += "\t\t\t\t" + "UPDATE " + table.getName() +" SET \n";
@@ -478,7 +478,7 @@ public class Sql {
 		mapperSql += "\t\t\t\t"+"\t</trim> \n";
 
 		if(isAnnotation) {
-			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t</script> \n";
 			mapperSql += "\t\"\"\")";
 		}
 		return mapperSql;
@@ -494,7 +494,7 @@ public class Sql {
 		
 		if(isAnnotation) {
 			mapperSql += "@Update(\"\"\"\n";
-			mapperSql += "\t\t\t\t<script> \n";		
+			mapperSql += "\t<script> \n";		
 		}
 		
 		mapperSql += "\t\t\t\t" + "UPDATE " + table.getName() +" SET \n";
@@ -507,7 +507,7 @@ public class Sql {
 		mapperSql += "\t\t\t\t"+"\t</trim> \n";
 
 		if(isAnnotation) {
-			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t</script> \n";
 			mapperSql += "\t\"\"\")";
 		}
 		return mapperSql;
@@ -643,7 +643,7 @@ public class Sql {
 		
 		if(isAnnotation) {
 			mapperSql += "@Delete(\"\"\"\n";
-			mapperSql += "\t\t\t\t<script> \n";		
+			mapperSql += "\t<script> \n";		
 
 		}
 		
@@ -654,7 +654,7 @@ public class Sql {
 		mapperSql += "\t\t\t\t"+"\t</trim> \n";
 		
 		if(isAnnotation) {
-			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t</script> \n";
 			mapperSql += "\t\"\"\")";
 		}
 		
@@ -672,7 +672,7 @@ public class Sql {
 		
 		if(isAnnotation) {
 			mapperSql += "@Delete(\"\"\"\n";
-			mapperSql += "\t\t\t\t<script> \n";		
+			mapperSql += "\t<script> \n";		
 		}
 		
 		mapperSql +=  "\t\t\t\t" + "DELETE FROM " + table.getName() +" \n";
@@ -682,7 +682,7 @@ public class Sql {
 		mapperSql += "\t\t\t\t"+"\t</trim> \n";
 		
 		if(isAnnotation) {
-			mapperSql += "\t\t\t\t</script> \n";
+			mapperSql += "\t</script> \n";
 			mapperSql += "\t\"\"\")";
 		}
 		
