@@ -115,6 +115,7 @@
 <!-- table 엘리먼트 정의-->		
 <!ELEMENT tables (table*)>
 	<!ATTLIST tables
+		required-primary (true | false) #IMPLIED
 		business CDATA #IMPLIED
 		package CDATA #IMPLIED
 		suffix-package CDATA #IMPLIED

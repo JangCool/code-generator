@@ -124,7 +124,9 @@ public class Sql {
 	public static String bindColumnPrimaryKey(TablesElement tables, TableElement table, List<Map<String, String>> pkColumnsRs) throws Exception{
 
 		if(pkColumnsRs == null || (pkColumnsRs != null && pkColumnsRs.size()  == 0)) {
-			throw new NotFoundPrimaryKey("Primary Key 정보가 존재하지 않습니다. 필수로 지정하여 주세요.");
+			if(table.isRequiredPrimary()) {
+				throw new NotFoundPrimaryKey("Primary Key 정보가 존재하지 않습니다. 필수로 지정하여 주세요.");				
+			}
 		}
 		return bindColumn(tables, table, pkColumnsRs, true);
 	}

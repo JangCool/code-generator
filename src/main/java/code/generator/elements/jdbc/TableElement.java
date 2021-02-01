@@ -25,6 +25,9 @@ public class TableElement {
 	
 	private String fileName;
 	
+    @XmlAttribute(name = "required-primary")
+	private boolean requiredPrimary = true;
+	
     @XmlAttribute
     private String name;
     
@@ -70,6 +73,11 @@ public class TableElement {
 		return UtilsText.convert2CamelCaseTable(otherFilename, false);
 	}
 
+
+	public boolean isRequiredPrimary() {
+		return requiredPrimary;
+	}
+	
 	public String getName() {
 		return name;
 	}
