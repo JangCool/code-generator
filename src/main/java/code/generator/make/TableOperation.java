@@ -62,6 +62,7 @@ public class TableOperation {
 			case "xml"					: java = "String";						break;
 			case "blob"					: java = "byte[]";						break;
 			case "clob"					: java = "byte[]";						break;
+			case "bytea"				: java = "byte[]";						break;
 
 		}
 		
@@ -207,6 +208,9 @@ public class TableOperation {
 			break;
 		case "varchar(max)":
 			jdbc = "VARCHAR";
+			break;
+		case "bytea":
+			jdbc = "BLOB";
 			break;
 		case "blob":
 			jdbc = "BLOB";
