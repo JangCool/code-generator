@@ -91,6 +91,9 @@ public class TableOperation {
 		case "bit":
 			jdbc = "BIT";
 			break;
+		case "jsonb":
+			jdbc = "OTHER";
+			break;
 		case "bpchar":
 			jdbc = "CHAR";
 			break;
