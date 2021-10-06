@@ -20,6 +20,7 @@ public class TableOperation {
 			case "bigint"				: java = "java.lang.Long";				break;
 			case "binary"				: java = "byte[]";						break;
 			case "bit"	 				: java = "java.lang.Boolean";			break;
+			case "jsonb"				: java = "String";						break;
 			case "char"	 				: java = "String";						break;
 			case "bpchar" 				: java = "String";						break;//postgresql
 			case "date"					: java = "java.sql.Timestamp";			break;
